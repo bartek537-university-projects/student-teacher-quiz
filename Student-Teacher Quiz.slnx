@@ -1,1 +1,5 @@
-<Solution />
+<Solution>
+  <Project Path="Quiz.Core/QuizApp.Core.csproj" Id="244ef47e-074d-48c4-9bb8-b0d5d8327766" />
+  <Project Path="Quiz.Student/QuizApp.Student.csproj" Id="20962163-2d84-4962-8276-47b8d1f7939d" />
+  <Project Path="Quiz.Teacher/QuizApp.Teacher.csproj" Id="11265fbf-5d2d-4bf2-87f5-49a98a9c3451" />
+</Solution>
