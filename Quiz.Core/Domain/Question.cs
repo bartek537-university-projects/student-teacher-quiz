@@ -1,5 +1,8 @@
-﻿namespace QuizApp.Core.Domain;
+﻿using System.Collections.ObjectModel;
 
-public class Question
-{
-}
+namespace QuizApp.Core.Domain;
+
+public record Question(
+    string Text,
+    ReadOnlyCollection<Answer> Answers
+    );
