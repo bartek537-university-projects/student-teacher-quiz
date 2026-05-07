@@ -1,4 +1,4 @@
-﻿namespace QuizApp.Core.Services;
+﻿namespace QuizApp.Core.Domain;
 
 internal class ProblemException(Type encryptionClass, string action, Exception? innerException = null) :
     Exception(

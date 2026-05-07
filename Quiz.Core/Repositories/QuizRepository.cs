@@ -1,33 +1,27 @@
 ﻿using QuizApp.Core.Domain;
-using QuizApp.Core.Services;
 using QuizApp.Core.Services.Encryption;
 using QuizApp.Core.Services.Serialization;
 
 namespace QuizApp.Core.Repositories;
 
-internal class QuizRepository
+internal class QuizRepository(string directory)
 {
-    private readonly string _directory;
     private readonly List<string> _quizNames = [];
 
-    public QuizRepository(string directory)
+    public List<string> AllQuizNames()
     {
-        _directory = directory;
-        RefreshNames();
-    }
-
-    public void RefreshNames()
-    {
-        var files = Directory.EnumerateFiles(_directory)
+        var files = Directory.EnumerateFiles(directory)
             .Where(file => !file.StartsWith('_'));
 
         _quizNames.Clear();
         _quizNames.AddRange(files);
+
+        return _quizNames[..];
     }
 
     public Quiz ReadQuiz(string name, IEncryptionKey key)
     {
-        string text = FileManager.Read(_directory, name) ??
+        string text = FileManager.Read(directory, name) ??
             throw new ProblemException(typeof(QuizRepository), "file reading");
 
         byte[] encrypted = Convert.FromBase64String(text);
@@ -42,6 +36,11 @@ internal class QuizRepository
         byte[] encrypted = key.Encrypt(bytes);
 
         string text = Convert.ToBase64String(encrypted);
-        FileManager.Write(_directory, name, text);
+        FileManager.Write(directory, name, text);
+    }
+
+    public void DeleteQuiz(string name)
+    {
+        FileManager.Delete(directory, name);
     }
 }

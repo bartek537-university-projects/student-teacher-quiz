@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using QuizApp.Core.Domain;
+using System.Security.Cryptography;
 
 namespace QuizApp.Core.Services.Encryption;
 
@@ -54,7 +55,9 @@ public sealed class AesKey : IEncryptionKey
         try
         {
             if (ciphertext.Length < 28)
-                throw new ArgumentException("Ciphertext is too short to contain Nonce and Authentication Tag.");
+            {
+                throw new ArgumentException("Ciphertext is too short.");
+            }
 
             ReadOnlySpan<byte> nonce = ciphertext.AsSpan(0, 12);
             ReadOnlySpan<byte> tag = ciphertext.AsSpan(12, 16);
