@@ -1,0 +1,75 @@
+﻿namespace QuizApp.Teacher.Presentation.Main
+{
+    partial class AnswerSegment
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            tbxTitle = new TextBox();
+            cbIsCorrect = new CheckBox();
+            SuspendLayout();
+            // 
+            // tbxTitle
+            // 
+            tbxTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbxTitle.Location = new Point(6, 6);
+            tbxTitle.Margin = new Padding(6);
+            tbxTitle.Name = "tbxTitle";
+            tbxTitle.Size = new Size(294, 23);
+            tbxTitle.TabIndex = 0;
+            // 
+            // cbIsCorrect
+            // 
+            cbIsCorrect.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbIsCorrect.AutoSize = true;
+            cbIsCorrect.Location = new Point(309, 8);
+            cbIsCorrect.Margin = new Padding(3, 3, 6, 3);
+            cbIsCorrect.Name = "cbIsCorrect";
+            cbIsCorrect.Size = new Size(79, 19);
+            cbIsCorrect.TabIndex = 3;
+            cbIsCorrect.Text = "Poprawna";
+            cbIsCorrect.UseVisualStyleBackColor = true;
+            // 
+            // AnswerSegment
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlLight;
+            Controls.Add(cbIsCorrect);
+            Controls.Add(tbxTitle);
+            Name = "AnswerSegment";
+            Size = new Size(394, 35);
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private TextBox tbxTitle;
+        private Button button1;
+        private CheckBox cbIsCorrect;
+    }
+}
