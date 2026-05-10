@@ -1,8 +1,8 @@
 ﻿namespace QuizApp.Core.Services.Encryption;
 
-internal static class KeyFactory
+public static class KeyFactory
 {
-    public async static Task<IEncryptionKey> AesFromPassword(string password)
+    public async static Task<ISymmetricKey> AesFromPassword(string password)
     {
         // Możesz zrobić jakis wrapper na AES, który będzie np.
         // doklejał do danych jakiś salt. Dlatego zwracam tu interfejs,

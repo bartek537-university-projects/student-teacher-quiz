@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Core.Domain;
 
 public record Answer(
-    string Text,
+    string Title,
     bool IsCorrect
     );

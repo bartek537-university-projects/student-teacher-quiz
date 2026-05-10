@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>Edytor quizów</value>
+  </data>
+  <data name="QuizTitleLabel" xml:space="preserve">
+    <value>Tytuł quizu</value>
+  </data>
+  <data name="LoadButtonText" xml:space="preserve">
+    <value>Wczytaj</value>
+  </data>
+  <data name="SaveButtonText" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="ClearButtonText" xml:space="preserve">
+    <value>Nowy</value>
+  </data>
+  <data name="AddQuestionButtonText" xml:space="preserve">
+    <value>Dodaj pytanie</value>
+  </data>
+  <data name="QuestionLabelFormat" xml:space="preserve">
+    <value>Pytanie {0}</value>
+  </data>
+  <data name="QuestionTitlePlaceholder" xml:space="preserve">
+    <value>Treść pytania</value>
+  </data>
+  <data name="PlusPointsLabel" xml:space="preserve">
+    <value>Punkty +</value>
+  </data>
+  <data name="MinusPointsLabel" xml:space="preserve">
+    <value>Punkty -</value>
+  </data>
+  <data name="AddAnswerButtonText" xml:space="preserve">
+    <value>Dodaj odpowiedź</value>
+  </data>
+  <data name="AnswerTitlePlaceholder" xml:space="preserve">
+    <value>Treść odpowiedzi</value>
+  </data>
+  <data name="AnswerCorrectText" xml:space="preserve">
+    <value>Poprawna</value>
+  </data>
+  <data name="MoveUpText" xml:space="preserve">
+    <value>Góra</value>
+  </data>
+  <data name="MoveDownText" xml:space="preserve">
+    <value>Dół</value>
+  </data>
+  <data name="RemoveText" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="PasswordDialogTitle" xml:space="preserve">
+    <value>Hasło</value>
+  </data>
+  <data name="PasswordLabel" xml:space="preserve">
+    <value>Podaj hasło</value>
+  </data>
+  <data name="OkButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="LoadDialogTitle" xml:space="preserve">
+    <value>Wczytaj quiz</value>
+  </data>
+  <data name="SaveDialogTitle" xml:space="preserve">
+    <value>Zapisz quiz</value>
+  </data>
+  <data name="QuizFileFilter" xml:space="preserve">
+    <value>Pliki quizu (*.quiz)|*.quiz|Wszystkie pliki (*.*)|*.*</value>
+  </data>
+  <data name="ValidationProblemTitle" xml:space="preserve">
+    <value>Błąd walidacji</value>
+  </data>
+  <data name="InfoTitle" xml:space="preserve">
+    <value>Informacja</value>
+  </data>
+  <data name="WarningTitle" xml:space="preserve">
+    <value>Ostrzeżenie</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Błąd</value>
+  </data>
+  <data name="DefaultQuizTitle" xml:space="preserve">
+    <value>Nowy Quiz</value>
+  </data>
+</root>

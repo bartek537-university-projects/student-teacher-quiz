@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using QuizApp.Core.Domain;
 
 namespace QuizApp.Core.Services.Serialization;
 

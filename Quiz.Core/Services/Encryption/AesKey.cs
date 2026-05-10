@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace QuizApp.Core.Services.Encryption;
 
-public sealed class AesKey : IEncryptionKey
+internal sealed class AesKey : ISymmetricKey
 {
     private readonly byte[] _key;
 

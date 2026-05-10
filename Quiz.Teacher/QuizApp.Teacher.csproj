@@ -9,10 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="Presentation\Main\Interfaces\" />
-    <Folder Include="Presenter\" />
   </ItemGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\Quiz.Core\QuizApp.Core.csproj" />

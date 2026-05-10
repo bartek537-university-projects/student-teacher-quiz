@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Immutable;
 
 namespace QuizApp.Core.Domain;
 
 public record Quiz(
     string Title,
-    ReadOnlyCollection<Question> Questions
+    ImmutableArray<Question> Questions
     );
