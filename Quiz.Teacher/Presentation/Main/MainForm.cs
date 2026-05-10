@@ -1,25 +1,174 @@
-using System.Collections.Immutable;
 using QuizApp.Core.Domain;
 using QuizApp.Teacher.View;
 
 namespace QuizApp.Teacher.Presentation.Main;
 
-internal partial class MainForm : Form, IEditorView, IQuizView, IQuestionView, IAnswerView
+internal partial class MainForm : Form, IEditorView, IQuestionView, IAnswerView
 {
-    private readonly List<QuestionEditorControl> _questionControls = [];
-    private int? _highlightedQuestionIndex;
+    public event Action<string>? OnTitleChange;
+
+    public event Action? OnClearRequest;
+    public event Action? OnClearInstant;
 
     public event Action? OnLoadRequest;
     public event Action? OnSaveRequest;
-    public event Action<string>? OnQuizTitleChange;
-    public event Action? OnClear;
+
+    public Quiz Quiz
+    {
+        get => field;
+        set
+        {
+            txbTitle.Text = value.Title;
+            field = value;
+        }
+    }
+
+    public MainForm(
+        out IEditorView editorView,
+        out IQuestionView questionView,
+        out IAnswerView answerView
+        )
+    {
+        InitializeComponent();
+
+        Quiz = new Quiz("", []); // will be overriden by presenter
+
+        editorView = this;
+        questionView = this;
+        answerView = this;
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+        OnClearInstant?.Invoke();
+    }
+
+    // -------------------------------
+
+    public void ShowValidationProblems(string message, int? questionIndex)
+    {
+        // TODO: make it more robust and user-friendly
+        ShowError("TEMP ERROR BOX: " + message);
+    }
+
+    public string? AskLoadFile()
+    {
+        using var openFileDialog = new OpenFileDialog()
+        {
+            Title = "Wybierz plik do otwarcia",
+            Filter = "Wszystkie pliki (*.*)|*.*",
+        };
+
+        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            return openFileDialog.FileName;
+        }
+
+        return null;
+    }
+
+    public string? AskSaveFile()
+    {
+        using var saveFileDialog = new SaveFileDialog()
+        {
+            Title = "Zapisz plik jako",
+            Filter = "Wszystkie pliki (*.*)|*.*"
+        };
+
+        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            return saveFileDialog.FileName;
+        }
+
+        return null;
+    }
+
+    public string? AskPassword()
+    {
+        // TODO: create a custom dialog
+
+        using var prompt = new Form()
+        {
+            Width = 300,
+            Height = 150,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            Text = "Wymagane podanie hasła...",
+            StartPosition = FormStartPosition.CenterScreen,
+            MaximizeBox = false,
+            MinimizeBox = false,
+        };
+
+        var textLabel = new Label()
+        {
+            Left = 20,
+            Top = 20,
+            Text = "Podaj hasło:"
+        };
+
+        var inputBox = new TextBox()
+        {
+            Left = 20,
+            Top = 45,
+            Width = 240,
+            UseSystemPasswordChar = true
+        };
+
+        var confirmation = new Button()
+        {
+            Text = "OK",
+            Left = 160,
+            Width = 100,
+            Top = 75,
+            DialogResult = DialogResult.OK
+        };
+
+        prompt.AcceptButton = confirmation;
+
+        prompt.Controls.Add(textLabel);
+        prompt.Controls.Add(inputBox);
+        prompt.Controls.Add(confirmation);
+
+        if (prompt.ShowDialog() == DialogResult.OK)
+        {
+            return inputBox.Text;
+        }
+
+        return null;
+    }
+
+    public void ShowInfo(string message)
+    {
+        MessageBox.Show(message, "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    public void ShowWarning(string message)
+    {
+        MessageBox.Show(message, "Ostrzeżenie", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+    }
+
+    public void ShowError(string message)
+    {
+        MessageBox.Show(message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+
+    public bool AskConfirm(string message)
+    {
+        DialogResult result = MessageBox.Show(message, "Potwierdzenie", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        return result == DialogResult.Yes;
+    }
+
+    // -------------------------------
+
     public event Action<int>? OnQuestionAdd;
     public event Action<int, string>? OnQuestionTitleChange;
-    public event Action<int, int> OnQuestionPlusPointsChange;
-    public event Action<int, int> OnQuestionMinusPointsChange;
+    public event Action<int, int>? OnQuestionPlusPointsChange;
+    public event Action<int, int>? OnQuestionMinusPointsChange;
     public event Action<int>? OnQuestionRemove;
     public event Action<int>? OnQuestionMoveDown;
     public event Action<int>? OnQuestionMoveUp;
+
+    // -------------------------------
+
     public event Action<int, int>? OnAnswerAdd;
     public event Action<int, int, string>? OnAnswerTitleChange;
     public event Action<int, int, bool>? OnAnswerIsCorrectChange;
@@ -27,171 +176,26 @@ internal partial class MainForm : Form, IEditorView, IQuizView, IQuestionView, I
     public event Action<int, int>? OnAnswerMoveDown;
     public event Action<int, int>? OnAnswerMoveUp;
 
-    private Quiz _quiz = new(QuizApp.Teacher.Properties.Resources.DefaultQuizTitle, []);
+    // -------------------------------
 
-    public Quiz Quiz
+    private void btnLoad_Click(object? sender, EventArgs e)
     {
-        get => _quiz;
-        set
-        {
-            ArgumentNullException.ThrowIfNull(value);
-            _quiz = value;
-            UpdateFromQuiz();
-        }
+        OnLoadRequest?.Invoke();
     }
 
-    public MainForm(
-        out IEditorView editorView,
-        out IQuizView quizView,
-        out IQuestionView questionView,
-        out IAnswerView answerView
-        )
+    private void btnSave_Click(object? sender, EventArgs e)
     {
-        InitializeComponent();
-
-        editorView = this;
-        quizView = this;
-        questionView = this;
-        answerView = this;
-
-        Text = QuizApp.Teacher.Properties.Resources.AppTitle;
-        txtQuizTitle.Text = _quiz.Title;
-
-        btnLoad.Click += (_, _) => OnLoadRequest?.Invoke();
-        btnSave.Click += (_, _) => OnSaveRequest?.Invoke();
-        btnClear.Click += (_, _) => OnClear?.Invoke();
-        btnAddQuestion.Click += (_, _) => OnQuestionAdd?.Invoke(Quiz.Questions.Length);
-        txtQuizTitle.TextChanged += QuizTitleTextChanged;
-
-        UpdateFromQuiz();
+        OnSaveRequest?.Invoke();
     }
 
-    private void Form1_Load(object sender, EventArgs e)
+    private void txbTitle_TextChanged(object sender, EventArgs e)
     {
-
+        string title = txbTitle.Text;
+        OnTitleChange?.Invoke(title);
     }
 
-    public void ShowValidationProblems(string message, int? questionIndex)
+    private void btnClear_Click(object sender, EventArgs e)
     {
-        _highlightedQuestionIndex = questionIndex;
-        UpdateQuestionHighlighting();
-        MessageBox.Show(this, message, QuizApp.Teacher.Properties.Resources.ValidationProblemTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-    }
-
-    public string AskLoadFile()
-    {
-        using var dialog = new OpenFileDialog
-        {
-            Title = QuizApp.Teacher.Properties.Resources.LoadDialogTitle,
-            Filter = QuizApp.Teacher.Properties.Resources.QuizFileFilter,
-            CheckFileExists = true
-        };
-
-        return dialog.ShowDialog(this) == DialogResult.OK ? dialog.FileName : string.Empty;
-    }
-
-    public string AskSaveFile()
-    {
-        using var dialog = new SaveFileDialog
-        {
-            Title = QuizApp.Teacher.Properties.Resources.SaveDialogTitle,
-            Filter = QuizApp.Teacher.Properties.Resources.QuizFileFilter,
-            OverwritePrompt = true
-        };
-
-        return dialog.ShowDialog(this) == DialogResult.OK ? dialog.FileName : string.Empty;
-    }
-
-    public string AskPassword()
-    {
-        using var dialog = new PasswordDialog();
-        return dialog.ShowDialog(this) == DialogResult.OK ? dialog.Password : string.Empty;
-    }
-
-    public void ShowInfo(string message)
-    {
-        MessageBox.Show(this, message, QuizApp.Teacher.Properties.Resources.InfoTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-
-    public void ShowWarning(string message)
-    {
-        MessageBox.Show(this, message, QuizApp.Teacher.Properties.Resources.WarningTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-    }
-
-    public void ShowError(string message)
-    {
-        MessageBox.Show(this, message, QuizApp.Teacher.Properties.Resources.ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
-    }
-
-    private void UpdateFromQuiz()
-    {
-        txtQuizTitle.TextChanged -= QuizTitleTextChanged;
-        txtQuizTitle.Text = _quiz.Title;
-        txtQuizTitle.TextChanged += QuizTitleTextChanged;
-
-        RebuildQuestions(_quiz.Questions);
-    }
-
-    private void QuizTitleTextChanged(object? sender, EventArgs e)
-    {
-        OnQuizTitleChange?.Invoke(txtQuizTitle.Text);
-    }
-
-    private void RebuildQuestions(ImmutableArray<Question> questions)
-    {
-        flpQuestions.SuspendLayout();
-        try
-        {
-            foreach (var control in _questionControls)
-            {
-                flpQuestions.Controls.Remove(control);
-                control.Dispose();
-            }
-
-            _questionControls.Clear();
-
-            for (int i = 0; i < questions.Length; i++)
-            {
-                var questionControl = new QuestionEditorControl();
-                questionControl.Bind(i, questions[i]);
-                HookQuestionEvents(questionControl, i);
-                questionControl.Width = flpQuestions.ClientSize.Width - 8;
-                questionControl.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-                flpQuestions.Controls.Add(questionControl);
-                _questionControls.Add(questionControl);
-            }
-        }
-        finally
-        {
-            flpQuestions.ResumeLayout();
-        }
-
-        UpdateQuestionHighlighting();
-    }
-
-    private void HookQuestionEvents(QuestionEditorControl control, int questionIndex)
-    {
-        control.OnTitleChanged += title => OnQuestionTitleChange?.Invoke(questionIndex, title);
-        control.OnPlusPointsChanged += points => OnQuestionPlusPointsChange?.Invoke(questionIndex, points);
-        control.OnMinusPointsChanged += points => OnQuestionMinusPointsChange?.Invoke(questionIndex, points);
-        control.OnRemove += () => OnQuestionRemove?.Invoke(questionIndex);
-        control.OnMoveDown += () => OnQuestionMoveDown?.Invoke(questionIndex);
-        control.OnMoveUp += () => OnQuestionMoveUp?.Invoke(questionIndex);
-        control.OnAddAnswer += () => OnAnswerAdd?.Invoke(questionIndex, _quiz.Questions[questionIndex].Answers.Length);
-        control.OnAnswerTitleChanged += (i0, i1, title) => OnAnswerTitleChange?.Invoke(i0, i1, title);
-        control.OnAnswerIsCorrectChanged += (i0, i1, isCorrect) => OnAnswerIsCorrectChange?.Invoke(i0, i1, isCorrect);
-        control.OnAnswerRemove += (i0, i1) => OnAnswerRemove?.Invoke(i0, i1);
-        control.OnAnswerMoveDown += (i0, i1) => OnAnswerMoveDown?.Invoke(i0, i1);
-        control.OnAnswerMoveUp += (i0, i1) => OnAnswerMoveUp?.Invoke(i0, i1);
-    }
-
-    private void UpdateQuestionHighlighting()
-    {
-        for (int i = 0; i < _questionControls.Count; i++)
-        {
-            bool isError = _highlightedQuestionIndex.HasValue && _highlightedQuestionIndex.Value == i;
-            _questionControls[i].HighlightError(isError);
-        }
+        OnClearRequest?.Invoke();
     }
 }

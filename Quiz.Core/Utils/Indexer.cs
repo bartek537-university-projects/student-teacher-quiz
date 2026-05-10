@@ -1,4 +1,4 @@
-﻿namespace QuizApp.Core.Domain.Objects;
+﻿namespace QuizApp.Core.Utils;
 
 public class Indexer<TIndex, TType>(
     Func<TIndex, TType> getter,

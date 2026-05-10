@@ -2,6 +2,11 @@
 
 internal interface IEditorView : IHasQuiz
 {
+    event Action<string>? OnTitleChange;
+
+    event Action? OnClearRequest;
+    event Action? OnClearInstant;
+
     event Action? OnLoadRequest;
     event Action? OnSaveRequest;
 
@@ -14,4 +19,5 @@ internal interface IEditorView : IHasQuiz
     void ShowInfo(string message);
     void ShowWarning(string message);
     void ShowError(string message);
+    bool AskConfirm(string message);
 }

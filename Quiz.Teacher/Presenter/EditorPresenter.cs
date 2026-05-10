@@ -1,12 +1,13 @@
 ﻿using QuizApp.Core.Domain;
 using QuizApp.Core.Model;
-using QuizApp.Teacher.Model;
 using QuizApp.Teacher.View;
 
 namespace QuizApp.Teacher.Presenter;
 
 internal class EditorPresenter
 {
+    private const string DEFAULT_QUIZ_TITLE = "";
+
     private readonly IEditorView _editorView;
     private readonly IQuizAccessor _quizAccessor;
     private readonly IQuizValidator _quizValidator;
@@ -27,8 +28,28 @@ internal class EditorPresenter
         _quizAccessor = quizAccessor;
         _quizValidator = quizValidator;
 
+        _editorView.OnTitleChange += QuizTitleChange;
+
+        _editorView.OnClearRequest += () => QuizClear(requireConfirmation: true);
+        _editorView.OnClearInstant += () => QuizClear(requireConfirmation: false);
+
         _editorView.OnLoadRequest += () => _ = LoadQuiz();
         _editorView.OnSaveRequest += () => _ = SaveQuiz();
+    }
+
+    private void QuizTitleChange(string title)
+    {
+        Quiz = Quiz with { Title = title };
+    }
+
+    private void QuizClear(bool requireConfirmation)
+    {
+        if (!requireConfirmation || _editorView.AskConfirm(
+            "Czy na pewno chcesz wyczyścić quiz? Wszystkie niezapisane zmiany zostaną utracone."
+            ))
+        {
+            Quiz = new Quiz(DEFAULT_QUIZ_TITLE, []);
+        }
     }
 
     private async Task LoadQuiz()
@@ -58,7 +79,14 @@ internal class EditorPresenter
 
     private async Task SaveQuiz()
     {
-        ValidateCurrentQuiz();
+        if (!_quizValidator.Validate(Quiz,
+            out string errorMessage,
+            out int? wrongQuestionIndex
+            ))
+        {
+            _editorView.ShowValidationProblems(errorMessage, wrongQuestionIndex);
+            return;
+        }
 
         try
         {
@@ -73,18 +101,6 @@ internal class EditorPresenter
         catch (Exception ex)
         {
             _editorView.ShowError($"Wystąpił błąd przy zapisie quizu: {ex.Message}");
-        }
-    }
-
-    private void ValidateCurrentQuiz()
-    {
-        if (!_quizValidator.Validate(Quiz,
-            out string errorMessage,
-            out int? wrongQuestionIndex
-            ))
-        {
-            _editorView.ShowValidationProblems(errorMessage, wrongQuestionIndex);
-            return;
         }
     }
 }

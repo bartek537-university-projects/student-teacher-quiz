@@ -1,8 +1,8 @@
 ﻿using QuizApp.Core.Domain;
 
-namespace QuizApp.Teacher.Model;
+namespace QuizApp.Core.Model;
 
-internal interface IQuizValidator
+public interface IQuizValidator
 {
     bool Validate(Quiz quiz,
         out string errorMessage,
@@ -10,7 +10,7 @@ internal interface IQuizValidator
         );
 }
 
-internal class QuizValidator : IQuizValidator
+public class QuizValidator : IQuizValidator
 {
     public bool Validate(Quiz quiz,
         out string errorMessage,

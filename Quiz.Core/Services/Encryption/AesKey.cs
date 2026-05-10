@@ -76,7 +76,7 @@ internal sealed class AesKey : ISymmetricKey
         }
     }
 
-    public void Dispose()
+    ~AesKey() // to simplify disposal management
     {
         if (_key != null)
         {

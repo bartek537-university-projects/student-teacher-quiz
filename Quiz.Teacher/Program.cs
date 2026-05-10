@@ -1,5 +1,4 @@
 using QuizApp.Core.Model;
-using QuizApp.Teacher.Model;
 using QuizApp.Teacher.Presentation.Main;
 using QuizApp.Teacher.Presenter;
 using QuizApp.Teacher.View;
@@ -19,15 +18,14 @@ internal static class Program
 
         // View configuration
         var mainForm = new MainForm(
-            out var editorView,
-            out var quizView,
-            out var questionView,
-            out var answerView
+            out IEditorView editorView,
+            out IQuestionView questionView,
+            out IAnswerView answerView
             );
 
         // Presenter configuration
-        var presenter = new MainPresenter(
-            editorView, quizView, questionView, answerView, // view
+        _ = new MainPresenter(
+            editorView, questionView, answerView, // view
             quizAccessor, quizValidator // model
             );
 

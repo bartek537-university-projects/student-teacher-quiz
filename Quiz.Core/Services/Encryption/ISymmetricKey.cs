@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Core.Services.Encryption;
 
-public interface ISymmetricKey : IDisposable
+internal interface ISymmetricKey
 {
     byte[] Encrypt(byte[] plaintext);
     byte[] Decrypt(byte[] ciphertext);

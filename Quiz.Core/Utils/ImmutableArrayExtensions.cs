@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace QuizApp.Core.Domain.Extensions;
+namespace QuizApp.Core.Utils;
 
 public static class ImmutableArrayExtensions
 {

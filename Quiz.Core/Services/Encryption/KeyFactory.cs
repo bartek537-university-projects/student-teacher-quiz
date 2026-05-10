@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Core.Services.Encryption;
 
-public static class KeyFactory
+internal static class KeyFactory
 {
     public async static Task<ISymmetricKey> AesFromPassword(string password)
     {

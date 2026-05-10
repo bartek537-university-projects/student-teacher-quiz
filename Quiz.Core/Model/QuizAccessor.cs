@@ -19,7 +19,7 @@ public class QuizAccessor : IQuizAccessor
 
         byte[] encrypted = Convert.FromBase64String(text);
 
-        using var key = await KeyFactory.AesFromPassword(password);
+        var key = await KeyFactory.AesFromPassword(password);
         byte[] bytes = key.Decrypt(encrypted);
 
         return Serializer.Deserialize<Quiz>(bytes);
@@ -29,7 +29,7 @@ public class QuizAccessor : IQuizAccessor
     {
         byte[] bytes = Serializer.Serialize(quiz);
 
-        using var key = await KeyFactory.AesFromPassword(password);
+        var key = await KeyFactory.AesFromPassword(password);
         byte[] encrypted = key.Encrypt(bytes);
 
         string text = Convert.ToBase64String(encrypted);

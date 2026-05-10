@@ -1,6 +1,5 @@
 ﻿using QuizApp.Core.Domain;
-using QuizApp.Core.Domain.Extensions;
-using QuizApp.Core.Domain.Objects;
+using QuizApp.Core.Utils;
 using QuizApp.Teacher.View;
 
 namespace QuizApp.Teacher.Presenter;

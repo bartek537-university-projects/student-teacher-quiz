@@ -5,4 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("WinForms Security", "WFO1000:Missing code serialization configuration for property content", Justification = "<Pending>", Scope = "member", Target = "~P:QuizApp.Teacher.Presentation.Main.MainForm.Quiz")]
+[assembly: SuppressMessage("WinForms Security", "WFO1000:Missing code serialization configuration for property content", Justification = "<Pending>")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
