@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             tbxTitle = new TextBox();
-            cbIsCorrect = new CheckBox();
+            cbxIsCorrect = new CheckBox();
             SuspendLayout();
             // 
             // tbxTitle
@@ -39,26 +39,28 @@
             tbxTitle.Margin = new Padding(6);
             tbxTitle.Name = "tbxTitle";
             tbxTitle.Size = new Size(294, 23);
-            tbxTitle.TabIndex = 0;
+            tbxTitle.TabIndex = 1;
+            tbxTitle.TextChanged += tbxTitle_TextChanged;
             // 
-            // cbIsCorrect
+            // cbxIsCorrect
             // 
-            cbIsCorrect.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            cbIsCorrect.AutoSize = true;
-            cbIsCorrect.Location = new Point(309, 8);
-            cbIsCorrect.Margin = new Padding(3, 3, 6, 3);
-            cbIsCorrect.Name = "cbIsCorrect";
-            cbIsCorrect.Size = new Size(79, 19);
-            cbIsCorrect.TabIndex = 3;
-            cbIsCorrect.Text = "Poprawna";
-            cbIsCorrect.UseVisualStyleBackColor = true;
+            cbxIsCorrect.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbxIsCorrect.AutoSize = true;
+            cbxIsCorrect.Location = new Point(309, 8);
+            cbxIsCorrect.Margin = new Padding(3, 3, 6, 3);
+            cbxIsCorrect.Name = "cbxIsCorrect";
+            cbxIsCorrect.Size = new Size(79, 19);
+            cbxIsCorrect.TabIndex = 2;
+            cbxIsCorrect.Text = "Poprawna";
+            cbxIsCorrect.UseVisualStyleBackColor = true;
+            cbxIsCorrect.CheckedChanged += cbxIsCorrect_CheckedChanged;
             // 
             // AnswerSegment
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLight;
-            Controls.Add(cbIsCorrect);
+            Controls.Add(cbxIsCorrect);
             Controls.Add(tbxTitle);
             Name = "AnswerSegment";
             Size = new Size(394, 35);
@@ -70,6 +72,6 @@
 
         private TextBox tbxTitle;
         private Button button1;
-        private CheckBox cbIsCorrect;
+        private CheckBox cbxIsCorrect;
     }
 }

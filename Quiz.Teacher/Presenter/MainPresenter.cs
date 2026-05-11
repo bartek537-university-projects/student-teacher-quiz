@@ -6,17 +6,20 @@ namespace QuizApp.Teacher.Presenter;
 internal class MainPresenter
 {
     public MainPresenter(
+
         // --- VIEW ---
         IEditorView editorView,
         IQuestionView questionView,
         IAnswerView answerView,
+
         // --- MODEL ---
         IQuizAccessor quizAccessor,
-        IQuizValidator quizValidator
+        IQuizValidator quizValidator,
+        IRecordFactory recordFactory
         )
     {
-        _ = new EditorPresenter(editorView, quizAccessor, quizValidator);
-        _ = new QuestionPresenter(questionView);
-        _ = new AnswerPresenter(answerView);
+        _ = new EditorPresenter(editorView, quizAccessor, quizValidator, recordFactory);
+        _ = new QuestionPresenter(questionView, recordFactory);
+        _ = new AnswerPresenter(answerView, recordFactory);
     }
 }

@@ -9,7 +9,7 @@ internal static partial class WinDialogs
             Width = 300,
             Height = 150,
             FormBorderStyle = FormBorderStyle.FixedDialog,
-            Text = "Podanie hasła wymagane...",
+            Text = "Wprowadzanie hasła",
             StartPosition = FormStartPosition.CenterScreen,
             MaximizeBox = false,
             MinimizeBox = false,

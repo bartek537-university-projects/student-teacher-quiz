@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace QuizApp.Core.Utils;
+namespace QuizApp.Core.Extensions;
 
 public static class ImmutableArrayExtensions
 {
@@ -33,5 +33,15 @@ public static class ImmutableArrayExtensions
             (arr[i], arr[j]) = (arr[j], arr[i]);
         }
         return [.. arr];
+    }
+
+    public static int FindIndexOf<T>(this ImmutableArray<T> self, Predicate<T> predicate)
+    {
+        for (int i = 0; i < self.Length; i++)
+        {
+            if (predicate(self[i]))
+                return i;
+        }
+        return -1;
     }
 }

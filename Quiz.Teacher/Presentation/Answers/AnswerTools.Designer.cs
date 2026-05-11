@@ -38,9 +38,10 @@
             btRemove.Location = new Point(291, 3);
             btRemove.Name = "btRemove";
             btRemove.Size = new Size(100, 29);
-            btRemove.TabIndex = 0;
+            btRemove.TabIndex = 2;
             btRemove.Text = "Usuń";
             btRemove.UseVisualStyleBackColor = true;
+            btRemove.Click += btRemove_Click;
             // 
             // btAdd
             // 
@@ -51,6 +52,7 @@
             btAdd.TabIndex = 1;
             btAdd.Text = "Dodaj";
             btAdd.UseVisualStyleBackColor = true;
+            btAdd.Click += btAdd_Click;
             // 
             // AnswerTools
             // 

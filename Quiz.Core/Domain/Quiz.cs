@@ -2,11 +2,9 @@
 
 namespace QuizApp.Core.Domain;
 
-public record Quiz(
-    string Title,
-    ImmutableArray<Question> Questions
-    )
+public record Quiz
 {
     public Guid Guid { get; init; } = Guid.NewGuid();
-    public Quiz New() => this with { Guid = Guid.NewGuid() };
+    public required string Title { get; init; }
+    public required ImmutableArray<Question> Questions { get; init; }
 }

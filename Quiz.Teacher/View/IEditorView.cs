@@ -2,6 +2,8 @@
 
 internal interface IEditorView : IHasQuiz
 {
+    int Lock { get; set; }
+
     event Action<string>? OnTitleChange;
 
     event Action? OnClearRequest;

@@ -1,13 +1,12 @@
 ﻿using QuizApp.Core.Domain;
-using QuizApp.Core.Utils;
+using QuizApp.Core.Extensions;
+using QuizApp.Core.Model;
 using QuizApp.Teacher.View;
 
 namespace QuizApp.Teacher.Presenter;
 
 internal class QuestionPresenter
 {
-    private readonly IQuestionView _questionView;
-
     private Quiz Quiz
     {
         get => _questionView.Quiz;
@@ -16,8 +15,12 @@ internal class QuestionPresenter
 
     private Indexer<int, Question> Questions { get; }
 
+    private readonly IQuestionView _questionView;
+    private readonly IRecordFactory _recordFactory;
+
     public QuestionPresenter(
-        IQuestionView questionView
+        IQuestionView questionView,
+        IRecordFactory recordFactory
         )
     {
         Questions = new Indexer<int, Question>(
@@ -28,8 +31,10 @@ internal class QuestionPresenter
             });
 
         _questionView = questionView;
+        _recordFactory = recordFactory;
 
-        _questionView.OnQuestionAdd += QuestionAdd;
+        _questionView.OnQuestionAdd += index => QuestionAdd(index, _recordFactory.MakeNewQuestion());
+        _questionView.OnQuestionInspireAdd += index => QuestionAdd(index, _recordFactory.MakeInspireQuestion());
         _questionView.OnQuestionTitleChange += QuestionTitleChange;
         _questionView.OnQuestionPlusPointsChange += QuestionPlusPointsChange;
         _questionView.OnQuestionMinusPointsChange += QuestionMinusPointsChange;

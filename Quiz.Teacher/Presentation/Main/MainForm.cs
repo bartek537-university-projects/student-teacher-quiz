@@ -6,14 +6,37 @@ namespace QuizApp.Teacher.Presentation.Main;
 
 internal partial class MainForm : Form, IEditorView
 {
+    public string Title
+    {
+        get => tbxTitle.Text;
+        set => tbxTitle.Text = lbAutoTitle.Text = value;
+    }
+
     public Quiz Quiz
     {
-        get => field;
+        get;
         set
         {
             if ((field = value) != null)
             {
                 RefreshView();
+            }
+        }
+    }
+
+    public int Lock
+    {
+        get;
+        set
+        {
+            bool locked = (field = value) > 0;
+
+            pnLock.Visible = locked;
+
+            if (locked)
+            {
+                pnLock.BringToFront();
+                ActiveControl = pnLock;
             }
         }
     }
@@ -37,23 +60,34 @@ internal partial class MainForm : Form, IEditorView
     {
         InitializeComponent();
 
-        Quiz = null!; // temporary, presenter will overwrite it
+        Quiz = null!; // presenter will overwrite it
+        Lock = 0;
 
         editorView = this;
         questionView = _questionView = new QuestionView(this, pnQuestions);
         answerView = _answerView = new AnswerView(this, _questionView.PanelIndexer);
     }
 
-    private void MainForm_Load(object? sender, EventArgs e)
+    private void MainForm_Load(object sender, EventArgs e)
     {
         OnClearInstant?.Invoke();
     }
 
     private void RefreshView()
     {
-        tbxTitle.Text = Quiz.Title;
-        _questionView.RefreshView();
-        _answerView.RefreshView();
+        List<Panel> panels = _questionView.AllPanels();
+        panels.ForEach(p => p.SuspendLayout());
+        try
+        {
+            Title = Quiz.Title;
+
+            _questionView.RefreshView();
+            _answerView.RefreshView();
+        }
+        finally
+        {
+            panels.ForEach(p => p.ResumeLayout(true));
+        }
     }
 
     public void ShowValidationProblems(string message, int? questionIndex)
@@ -75,8 +109,10 @@ internal partial class MainForm : Form, IEditorView
     public void ShowError(string message) => WinDialogs.ShowError(message);
     public bool AskConfirm(string message) => WinDialogs.AskConfirm(message);
 
-    private void btnLoad_Click(object? sender, EventArgs e) => OnLoadRequest?.Invoke();
-    private void btnSave_Click(object? sender, EventArgs e) => OnSaveRequest?.Invoke();
     private void btnClear_Click(object sender, EventArgs e) => OnClearRequest?.Invoke();
+    private void btnAddQuestion_Click(object sender, EventArgs e) => _questionView.CreateQuestionOnTail(inspire: false);
+    private void btnInspireQuestion_Click(object sender, EventArgs e) => _questionView.CreateQuestionOnTail(inspire: true);
+    private void btnLoad_Click(object sender, EventArgs e) => OnLoadRequest?.Invoke();
+    private void btnSave_Click(object sender, EventArgs e) => OnSaveRequest?.Invoke();
     private void txbTitle_TextChanged(object sender, EventArgs e) => OnTitleChange?.Invoke(tbxTitle.Text);
 }

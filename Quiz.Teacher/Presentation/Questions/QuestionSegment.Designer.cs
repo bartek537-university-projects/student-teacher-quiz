@@ -39,11 +39,8 @@
             btnDown = new Button();
             pnViusalBg = new Panel();
             pnAnswers = new Panel();
-            answerTools1 = new AnswerTools();
-            answerSegment3 = new AnswerSegment();
-            answerSegment2 = new AnswerSegment();
-            answerSegment1 = new AnswerSegment();
-            btCopy = new Button();
+            answerTools = new AnswerTools();
+            btNew = new Button();
             pnViusalBg.SuspendLayout();
             pnAnswers.SuspendLayout();
             SuspendLayout();
@@ -73,19 +70,23 @@
             // 
             tbxPlusPoints.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             tbxPlusPoints.Location = new Point(398, 72);
+            tbxPlusPoints.MaxLength = 5;
             tbxPlusPoints.Name = "tbxPlusPoints";
             tbxPlusPoints.Size = new Size(67, 23);
             tbxPlusPoints.TabIndex = 2;
-            tbxPlusPoints.TextChanged += tbxPlusPoints_TextChanged;
+            tbxPlusPoints.KeyPress += imagineOnlyNumbers_KeyPress;
+            tbxPlusPoints.Validated += tbxPlusPoints_TextChanged;
             // 
             // tbxMinusPoints
             // 
             tbxMinusPoints.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             tbxMinusPoints.Location = new Point(398, 101);
+            tbxMinusPoints.MaxLength = 5;
             tbxMinusPoints.Name = "tbxMinusPoints";
             tbxMinusPoints.Size = new Size(67, 23);
-            tbxMinusPoints.TabIndex = 3;
-            tbxMinusPoints.TextChanged += tbxMinusPoints_TextChanged;
+            tbxMinusPoints.TabIndex = 4;
+            tbxMinusPoints.KeyPress += imagineOnlyNumbers_KeyPress;
+            tbxMinusPoints.Leave += tbxMinusPoints_TextChanged;
             // 
             // cbxMinusPoints
             // 
@@ -94,9 +95,10 @@
             cbxMinusPoints.Location = new Point(471, 103);
             cbxMinusPoints.Name = "cbxMinusPoints";
             cbxMinusPoints.Size = new Size(67, 19);
-            cbxMinusPoints.TabIndex = 6;
+            cbxMinusPoints.TabIndex = 5;
             cbxMinusPoints.Text = "Ujemne";
             cbxMinusPoints.UseVisualStyleBackColor = true;
+            cbxMinusPoints.CheckedChanged += cbxMinusPoints_CheckedChanged;
             // 
             // cbxPlusPoints
             // 
@@ -105,19 +107,21 @@
             cbxPlusPoints.Location = new Point(471, 74);
             cbxPlusPoints.Name = "cbxPlusPoints";
             cbxPlusPoints.Size = new Size(63, 19);
-            cbxPlusPoints.TabIndex = 7;
+            cbxPlusPoints.TabIndex = 3;
             cbxPlusPoints.Text = "Punkty";
             cbxPlusPoints.UseVisualStyleBackColor = true;
+            cbxPlusPoints.CheckedChanged += cbxPlusPoints_CheckedChanged;
             // 
             // lbAutoTitle
             // 
-            lbAutoTitle.AutoSize = true;
+            lbAutoTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lbAutoTitle.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
             lbAutoTitle.Location = new Point(3, 3);
             lbAutoTitle.Name = "lbAutoTitle";
-            lbAutoTitle.Size = new Size(101, 30);
+            lbAutoTitle.Size = new Size(496, 34);
             lbAutoTitle.TabIndex = 8;
             lbAutoTitle.Text = "Pytanie 0";
+            lbAutoTitle.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // btnUp
             // 
@@ -125,7 +129,7 @@
             btnUp.Location = new Point(398, 130);
             btnUp.Name = "btnUp";
             btnUp.Size = new Size(140, 34);
-            btnUp.TabIndex = 10;
+            btnUp.TabIndex = 6;
             btnUp.Text = "Przesuń w górę";
             btnUp.UseVisualStyleBackColor = true;
             btnUp.Click += btnUp_Click;
@@ -136,7 +140,7 @@
             btnDown.Location = new Point(398, 169);
             btnDown.Name = "btnDown";
             btnDown.Size = new Size(140, 34);
-            btnDown.TabIndex = 11;
+            btnDown.TabIndex = 7;
             btnDown.Text = "Przesuń w dół";
             btnDown.UseVisualStyleBackColor = true;
             btnDown.Click += btnDown_Click;
@@ -152,67 +156,37 @@
             pnViusalBg.Size = new Size(389, 171);
             pnViusalBg.TabIndex = 12;
             // 
-            // panel1
+            // pnAnswers
             // 
             pnAnswers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnAnswers.AutoScroll = true;
             pnAnswers.BackColor = SystemColors.AppWorkspace;
-            pnAnswers.Controls.Add(answerTools1);
-            pnAnswers.Controls.Add(answerSegment3);
-            pnAnswers.Controls.Add(answerSegment2);
-            pnAnswers.Controls.Add(answerSegment1);
+            pnAnswers.Controls.Add(answerTools);
             pnAnswers.Location = new Point(5, 5);
             pnAnswers.Margin = new Padding(5);
-            pnAnswers.Name = "panel1";
+            pnAnswers.Name = "pnAnswers";
             pnAnswers.Size = new Size(379, 161);
-            pnAnswers.TabIndex = 13;
+            pnAnswers.TabIndex = 9;
             // 
             // answerTools1
             // 
-            answerTools1.BackColor = SystemColors.ControlLight;
-            answerTools1.Dock = DockStyle.Top;
-            answerTools1.Location = new Point(0, 105);
-            answerTools1.Name = "answerTools1";
-            answerTools1.Size = new Size(379, 35);
-            answerTools1.TabIndex = 3;
+            answerTools.BackColor = SystemColors.ControlLight;
+            answerTools.Dock = DockStyle.Top;
+            answerTools.Location = new Point(0, 0);
+            answerTools.Name = "answerTools1";
+            answerTools.Size = new Size(379, 35);
+            answerTools.TabIndex = 3;
             // 
-            // answerSegment3
+            // btNew
             // 
-            answerSegment3.BackColor = SystemColors.ControlLight;
-            answerSegment3.Dock = DockStyle.Top;
-            answerSegment3.Location = new Point(0, 70);
-            answerSegment3.Name = "answerSegment3";
-            answerSegment3.Size = new Size(379, 35);
-            answerSegment3.TabIndex = 2;
-            // 
-            // answerSegment2
-            // 
-            answerSegment2.BackColor = SystemColors.ControlLight;
-            answerSegment2.Dock = DockStyle.Top;
-            answerSegment2.Location = new Point(0, 35);
-            answerSegment2.Name = "answerSegment2";
-            answerSegment2.Size = new Size(379, 35);
-            answerSegment2.TabIndex = 1;
-            // 
-            // answerSegment1
-            // 
-            answerSegment1.BackColor = SystemColors.ControlLight;
-            answerSegment1.Dock = DockStyle.Top;
-            answerSegment1.Location = new Point(0, 0);
-            answerSegment1.Name = "answerSegment1";
-            answerSegment1.Size = new Size(379, 35);
-            answerSegment1.TabIndex = 0;
-            // 
-            // btCopy
-            // 
-            btCopy.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btCopy.Location = new Point(398, 209);
-            btCopy.Name = "btCopy";
-            btCopy.Size = new Size(140, 34);
-            btCopy.TabIndex = 13;
-            btCopy.Text = "Kopiuj";
-            btCopy.UseVisualStyleBackColor = true;
-            btCopy.Click += btCopy_Click;
+            btNew.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btNew.Location = new Point(398, 209);
+            btNew.Name = "btNew";
+            btNew.Size = new Size(140, 34);
+            btNew.TabIndex = 8;
+            btNew.Text = "Nowe pytanie";
+            btNew.UseVisualStyleBackColor = true;
+            btNew.Click += btNew_Click;
             // 
             // QuestionSegment
             // 
@@ -221,7 +195,7 @@
             BackColor = Color.Gainsboro;
             Controls.Add(btnDown);
             Controls.Add(btnUp);
-            Controls.Add(btCopy);
+            Controls.Add(btNew);
             Controls.Add(pnViusalBg);
             Controls.Add(lbAutoTitle);
             Controls.Add(cbxPlusPoints);
@@ -251,11 +225,8 @@
         private Button btnUp;
         private Button btnDown;
         private Panel pnViusalBg;
-        private Button btCopy;
+        private Button btNew;
         private Panel pnAnswers;
-        private AnswerSegment answerSegment3;
-        private AnswerSegment answerSegment2;
-        private AnswerSegment answerSegment1;
-        private AnswerTools answerTools1;
+        private AnswerTools answerTools;
     }
 }

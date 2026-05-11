@@ -1,10 +1,10 @@
 ﻿using QuizApp.Core.Domain;
-using QuizApp.Core.Utils;
+using QuizApp.Core.Extensions;
 using QuizApp.Teacher.View;
 
 namespace QuizApp.Teacher.Presentation.Main;
 
-internal class QuestionView(IHasQuiz hasQuiz, Panel panel) : IQuestionView
+internal partial class QuestionView(IHasQuiz hasQuiz, Panel panel) : IQuestionView
 {
     public Quiz Quiz
     {
@@ -13,11 +13,12 @@ internal class QuestionView(IHasQuiz hasQuiz, Panel panel) : IQuestionView
     }
 
     public Indexer<int, Panel> PanelIndexer => new(
-        getter: i => SegmentByIndex(i).Panel,
+        getter: i => SegmentByIndex(i).GetPanel(),
         setter: (_, _) => throw new NotSupportedException("Indexer is read-only.")
         );
 
-    public event Action<int, Question>? OnQuestionAdd;
+    public event Action<int>? OnQuestionAdd;
+    public event Action<int>? OnQuestionInspireAdd;
     public event Action<int, string>? OnQuestionTitleChange;
     public event Action<int, int>? OnQuestionPlusPointsChange;
     public event Action<int, int>? OnQuestionMinusPointsChange;
@@ -27,54 +28,77 @@ internal class QuestionView(IHasQuiz hasQuiz, Panel panel) : IQuestionView
 
     public void RefreshView()
     {
-        HashSet<Guid> inPanel = [..
-            panel.Controls
-                .OfType<QuestionSegment>()
-                .Select(s => s.Guid)
-            ];
+        var questions = Quiz.Questions;
 
-        HashSet<Guid> inData = [..
-            Quiz.Questions
-                .Select(q => q.Guid)
-            ];
+        HashSet<Guid> inData = GuidsInData();
+        HashSet<Guid> inPanel = GuidsInPanel();
+        HashSet<Guid> toRemove = [.. inPanel.Except(inData)];
 
-        HashSet<Guid> toKeep = [.. inPanel.Intersect(inData)];
-        HashSet<Guid> toKill = [.. inPanel.Except(toKeep)];
-
-        Dictionary<Guid, QuestionSegment> segmentsByGuid = panel.Controls
+        var segDict = panel.Controls
             .OfType<QuestionSegment>()
             .ToDictionary(s => s.Guid);
 
-        panel.Controls.Clear();
-
-        foreach (Guid guid in toKill)
+        foreach (var guid in toRemove) // remove old
         {
-            segmentsByGuid[guid].Dispose();
+            segDict[guid].Dispose();
         }
-        
-        for (int i = 0; i < Quiz.Questions.Length; i++)
+
+        for (int i = 0; i < inData.Count; i++) // add new
+        {
+            Question question = questions[i];
+            if (!segDict.ContainsKey(question.Guid))
+            {
+                var segment = CreateSegment(question, i);
+                segDict.Add(question.Guid, segment);
+
+                panel.Controls.Add(segment);
+            }
+        }
+
+        for (int i = 0; i < inData.Count; i++) // reorder
         {
             Question question = Quiz.Questions[i];
+            var segment = segDict[question.Guid];
 
-            Guid guid = question.Guid;
-            if (!segmentsByGuid.TryGetValue(guid, out var segment))
-            {
-                segment = CreateSegment(question);
-            }
-
-            panel.Controls.Add(segment);
-
-            segment.RefreshView(question, i);
+            segment.BringToFront();
         }
+
+        for (int i = 0; i < inData.Count; i++) // refresh
+        {
+            Question question = Quiz.Questions[i];
+            var segment = segDict[question.Guid];
+
+            bool isFirst = i == 0;
+            bool isLast = i == inData.Count - 1;
+
+            segment.RefreshView(question, isFirst, isLast);
+            segment.TabIndex = i;
+        }
+    }
+
+    public List<Panel> AllPanels()
+    {
+        return [
+            panel,
+            .. panel.Controls
+                .OfType<QuestionSegment>()
+                .Select(s => s.GetPanel())
+            ];
+    }
+
+    public void CreateQuestionOnTail(bool inspire)
+    {
+        if (inspire) { OnQuestionInspireAdd?.Invoke(Quiz.Questions.Length); }
+        else { OnQuestionAdd?.Invoke(Quiz.Questions.Length); }
     }
 
     public void HighlightError(int index)
     {
-        QuestionSegment segment = SegmentByIndex(index);
+        var segment = SegmentByIndex(index);
         segment.HighlightError();
     }
 
-    private QuestionSegment CreateSegment(Question question)
+    private QuestionSegment CreateSegment(Question question, int index)
     {
         Guid guid = question.Guid;
 
@@ -84,44 +108,15 @@ internal class QuestionView(IHasQuiz hasQuiz, Panel panel) : IQuestionView
             Dock = DockStyle.Top,
         };
 
-        int IndexOf(Guid guid)
-        {
-            int lngt = Quiz.Questions.Length;
-            for (int i = 0; i < lngt; i++)
-            {
-                if (Quiz.Questions[i].Guid == guid)
-                    return i;
-            }
-            throw new InvalidOperationException($"Question with guid {guid} not found in quiz.");
-        }
+        result.OnTitleChange += title => OnQuestionTitleChange?.Invoke(IndexByGuid(guid), title);
+        result.OnPlusPointsChange += plusPoints => OnQuestionPlusPointsChange?.Invoke(IndexByGuid(guid), plusPoints);
+        result.OnMinusPointsChange += minusPoints => OnQuestionMinusPointsChange?.Invoke(IndexByGuid(guid), minusPoints);
 
-        Question InstanceOf(Guid guid)
-        {
-            int index = IndexOf(guid);
-            return Quiz.Questions[index];
-        }
-
-        result.OnTitleChange += title => OnQuestionTitleChange?.Invoke(IndexOf(guid), title);
-        result.OnPlusPointsChange += plusPoints => OnQuestionPlusPointsChange?.Invoke(IndexOf(guid), plusPoints);
-        result.OnMinusPointsChange += minusPoints => OnQuestionMinusPointsChange?.Invoke(IndexOf(guid), minusPoints);
-
-        result.OnCopy += () => OnQuestionAdd?.Invoke(IndexOf(guid) + 1, InstanceOf(guid).New());
-        result.OnDelete += () => OnQuestionRemove?.Invoke(IndexOf(guid));
-        result.OnMoveDown += () => OnQuestionMoveDown?.Invoke(IndexOf(guid));
-        result.OnMoveUp += () => OnQuestionMoveUp?.Invoke(IndexOf(guid));
+        result.OnNew += () => OnQuestionAdd?.Invoke(IndexByGuid(guid) + 1);
+        result.OnDelete += () => OnQuestionRemove?.Invoke(IndexByGuid(guid));
+        result.OnMoveDown += () => OnQuestionMoveDown?.Invoke(IndexByGuid(guid));
+        result.OnMoveUp += () => OnQuestionMoveUp?.Invoke(IndexByGuid(guid));
 
         return result;
-    }
-
-    private QuestionSegment SegmentByIndex(int index)
-    {
-        ArgumentOutOfRangeException.ThrowIfLessThan(index, 0);
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Quiz.Questions.Length);
-
-        QuestionSegment segment = panel.Controls
-            .OfType<QuestionSegment>()
-            .First(s => s.Guid == Quiz.Questions[index].Guid);
-
-        return segment;
     }
 }

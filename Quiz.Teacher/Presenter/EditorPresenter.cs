@@ -6,27 +6,28 @@ namespace QuizApp.Teacher.Presenter;
 
 internal class EditorPresenter
 {
-    private const string QUIZ_FILE_EXTENSION = "qz";
-
-    private readonly IEditorView _editorView;
-    private readonly IQuizAccessor _quizAccessor;
-    private readonly IQuizValidator _quizValidator;
-
     private Quiz Quiz
     {
         get => _editorView.Quiz;
         set => _editorView.Quiz = value;
     }
 
+    private readonly IEditorView _editorView;
+    private readonly IQuizAccessor _quizAccessor;
+    private readonly IQuizValidator _quizValidator;
+    private readonly IRecordFactory _recordFactory;
+
     public EditorPresenter(
         IEditorView editorView,
         IQuizAccessor quizAccessor,
-        IQuizValidator quizValidator
+        IQuizValidator quizValidator,
+        IRecordFactory recordFactory
         )
     {
         _editorView = editorView;
         _quizAccessor = quizAccessor;
         _quizValidator = quizValidator;
+        _recordFactory = recordFactory;
 
         _editorView.OnTitleChange += QuizTitleChange;
 
@@ -44,27 +45,21 @@ internal class EditorPresenter
 
     private void QuizClear(bool requireConfirmation)
     {
-        static Quiz MakeDefaultQuiz() => new("Nowy Quiz", [
-            new Question("Pytanie 1", 1, 0, [
-                new Answer("Odpowiedź A", true),
-                new Answer("Odpowiedź B", false),
-                new Answer("Odpowiedź C", false)
-                ])
-            ]);
-
         if (!requireConfirmation || _editorView.AskConfirm(
             "Czy na pewno chcesz wyczyścić quiz? Wszystkie niezapisane zmiany zostaną utracone."
             ))
         {
-            Quiz = MakeDefaultQuiz();
+            Quiz = _recordFactory.MakeNewQuiz();
         }
     }
 
     private async Task LoadQuiz()
     {
+        _editorView.Lock++;
+
         try
         {
-            string? filepath = _editorView.AskLoadFile(QUIZ_FILE_EXTENSION);
+            string? filepath = _editorView.AskLoadFile("qz");
             if (filepath == null) return;
 
             string? password = _editorView.AskPassword();
@@ -83,6 +78,10 @@ internal class EditorPresenter
         {
             _editorView.ShowError($"Wystąpił błąd przy wczytywaniu quizu: {ex.Message}");
         }
+        finally
+        {
+            _editorView.Lock--;
+        }
     }
 
     private async Task SaveQuiz()
@@ -96,9 +95,11 @@ internal class EditorPresenter
             return;
         }
 
+        _editorView.Lock++;
+
         try
         {
-            string? filepath = _editorView.AskSaveFile(QUIZ_FILE_EXTENSION);
+            string? filepath = _editorView.AskSaveFile("qz");
             if (filepath == null) return;
 
             string? password = _editorView.AskPassword();
@@ -109,6 +110,10 @@ internal class EditorPresenter
         catch (Exception ex)
         {
             _editorView.ShowError($"Wystąpił błąd przy zapisie quizu: {ex.Message}");
+        }
+        finally
+        {
+            _editorView.Lock--;
         }
     }
 }

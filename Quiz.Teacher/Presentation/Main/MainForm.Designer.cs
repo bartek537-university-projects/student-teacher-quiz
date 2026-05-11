@@ -30,54 +30,57 @@ partial class MainForm
     /// </summary>
     private void InitializeComponent()
     {
-        button1 = new Button();
+        btnSave = new Button();
         btnLoad = new Button();
         tbxTitle = new TextBox();
         btnClear = new Button();
         pnQuestions = new Panel();
         pnVisualBg = new Panel();
-        pnQuestions.SuspendLayout();
+        pnLock = new QuizApp.Teacher.Presentation.Controls.InvisiblePanel();
+        btnAddQuestion = new Button();
+        lbAutoTitle = new Label();
+        btnInspireQuestion = new Button();
         pnVisualBg.SuspendLayout();
         SuspendLayout();
         // 
-        // button1
+        // btnSave
         // 
-        button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        button1.Location = new Point(582, 133);
-        button1.Name = "button1";
-        button1.Size = new Size(250, 40);
-        button1.TabIndex = 0;
-        button1.Text = "Zapisz quiz";
-        button1.UseVisualStyleBackColor = true;
-        button1.Click += btnSave_Click;
+        btnSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnSave.Location = new Point(582, 167);
+        btnSave.Name = "btnSave";
+        btnSave.Size = new Size(250, 40);
+        btnSave.TabIndex = 3;
+        btnSave.Text = "Zapisz quiz";
+        btnSave.UseVisualStyleBackColor = true;
+        btnSave.Click += btnSave_Click;
         // 
         // btnLoad
         // 
         btnLoad.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        btnLoad.Location = new Point(582, 87);
+        btnLoad.Location = new Point(582, 121);
         btnLoad.Name = "btnLoad";
         btnLoad.Size = new Size(250, 40);
-        btnLoad.TabIndex = 1;
+        btnLoad.TabIndex = 2;
         btnLoad.Text = "Wczytaj quiz";
         btnLoad.UseVisualStyleBackColor = true;
         btnLoad.Click += btnLoad_Click;
         // 
-        // txbTitle
+        // tbxTitle
         // 
         tbxTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        tbxTitle.Location = new Point(12, 12);
-        tbxTitle.Name = "txbTitle";
+        tbxTitle.Location = new Point(12, 46);
+        tbxTitle.Name = "tbxTitle";
         tbxTitle.Size = new Size(820, 23);
-        tbxTitle.TabIndex = 2;
+        tbxTitle.TabIndex = 0;
         tbxTitle.TextChanged += txbTitle_TextChanged;
         // 
         // btnClear
         // 
         btnClear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        btnClear.Location = new Point(582, 41);
+        btnClear.Location = new Point(582, 75);
         btnClear.Name = "btnClear";
         btnClear.Size = new Size(250, 40);
-        btnClear.TabIndex = 4;
+        btnClear.TabIndex = 1;
         btnClear.Text = "Nowy quiz";
         btnClear.UseVisualStyleBackColor = true;
         btnClear.Click += btnClear_Click;
@@ -87,7 +90,7 @@ partial class MainForm
         pnQuestions.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         pnQuestions.AutoScroll = true;
         pnQuestions.BackColor = SystemColors.ControlDarkDark;
-        pnQuestions.Location = new Point(5, 5);
+        pnQuestions.Location = new Point(5, 7);
         pnQuestions.Margin = new Padding(5);
         pnQuestions.Name = "pnQuestions";
         pnQuestions.Size = new Size(554, 498);
@@ -99,26 +102,71 @@ partial class MainForm
         pnVisualBg.AutoScroll = true;
         pnVisualBg.BackColor = SystemColors.ControlDarkDark;
         pnVisualBg.Controls.Add(pnQuestions);
-        pnVisualBg.Location = new Point(12, 41);
+        pnVisualBg.Location = new Point(12, 75);
         pnVisualBg.Name = "pnVisualBg";
-        pnVisualBg.Size = new Size(564, 508);
+        pnVisualBg.Size = new Size(564, 510);
         pnVisualBg.TabIndex = 7;
+        // 
+        // pnLock
+        // 
+        pnLock.BackColor = Color.RosyBrown;
+        pnLock.Dock = DockStyle.Fill;
+        pnLock.Location = new Point(0, 0);
+        pnLock.Name = "pnLock";
+        pnLock.Size = new Size(844, 597);
+        pnLock.TabIndex = 8;
+        // 
+        // btnAddQuestion
+        // 
+        btnAddQuestion.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnAddQuestion.Location = new Point(582, 223);
+        btnAddQuestion.Name = "btnAddQuestion";
+        btnAddQuestion.Size = new Size(250, 40);
+        btnAddQuestion.TabIndex = 4;
+        btnAddQuestion.Text = "Dodaj pytanie";
+        btnAddQuestion.UseVisualStyleBackColor = true;
+        btnAddQuestion.Click += btnAddQuestion_Click;
+        // 
+        // lbAutoTitle
+        // 
+        lbAutoTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        lbAutoTitle.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
+        lbAutoTitle.Location = new Point(12, 9);
+        lbAutoTitle.Name = "lbAutoTitle";
+        lbAutoTitle.Size = new Size(820, 34);
+        lbAutoTitle.TabIndex = 9;
+        lbAutoTitle.Text = "Pytanie 0";
+        lbAutoTitle.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // btnInspireQuestion
+        // 
+        btnInspireQuestion.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnInspireQuestion.Location = new Point(582, 269);
+        btnInspireQuestion.Name = "btnInspireQuestion";
+        btnInspireQuestion.Size = new Size(250, 40);
+        btnInspireQuestion.TabIndex = 5;
+        btnInspireQuestion.Text = "Dodaj inspirację";
+        btnInspireQuestion.UseVisualStyleBackColor = true;
+        btnInspireQuestion.Click += btnInspireQuestion_Click;
         // 
         // MainForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.Gainsboro;
-        ClientSize = new Size(844, 561);
-        Controls.Add(pnVisualBg);
+        ClientSize = new Size(844, 597);
+        Controls.Add(btnInspireQuestion);
+        Controls.Add(lbAutoTitle);
+        Controls.Add(btnAddQuestion);
         Controls.Add(btnLoad);
-        Controls.Add(button1);
+        Controls.Add(btnSave);
+        Controls.Add(pnVisualBg);
         Controls.Add(btnClear);
         Controls.Add(tbxTitle);
+        Controls.Add(pnLock);
         Name = "MainForm";
         Text = "Aplikacja do tworzenia quizu - Teacher";
         Load += MainForm_Load;
-        pnQuestions.ResumeLayout(false);
         pnVisualBg.ResumeLayout(false);
         ResumeLayout(false);
         PerformLayout();
@@ -126,10 +174,14 @@ partial class MainForm
 
     #endregion
 
-    private Button button1;
+    private Button btnSave;
     private Button btnLoad;
     private TextBox tbxTitle;
     private Button btnClear;
     private Panel pnQuestions;
     private Panel pnVisualBg;
+    private Controls.InvisiblePanel pnLock;
+    private Button btnAddQuestion;
+    private Label lbAutoTitle;
+    private Button btnInspireQuestion;
 }

@@ -15,6 +15,7 @@ internal static class Program
         // Model configuration
         var quizAccessor = new QuizAccessor();
         var quizValidator = new QuizValidator();
+        var recordFactory = new RecordFactory();
 
         // View configuration
         var mainForm = new MainForm(
@@ -26,7 +27,7 @@ internal static class Program
         // Presenter configuration
         _ = new MainPresenter(
             editorView, questionView, answerView, // view
-            quizAccessor, quizValidator // model
+            quizAccessor, quizValidator, recordFactory // model
             );
 
         Application.Run(mainForm);
