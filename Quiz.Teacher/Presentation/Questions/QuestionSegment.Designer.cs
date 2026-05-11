@@ -120,13 +120,13 @@
             lbAutoTitle.Name = "lbAutoTitle";
             lbAutoTitle.Size = new Size(496, 34);
             lbAutoTitle.TabIndex = 8;
-            lbAutoTitle.Text = "Pytanie 0";
+            lbAutoTitle.Text = "Pytanie";
             lbAutoTitle.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // btnUp
             // 
             btnUp.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnUp.Location = new Point(398, 130);
+            btnUp.Location = new Point(398, 138);
             btnUp.Name = "btnUp";
             btnUp.Size = new Size(140, 34);
             btnUp.TabIndex = 6;
@@ -137,7 +137,7 @@
             // btnDown
             // 
             btnDown.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnDown.Location = new Point(398, 169);
+            btnDown.Location = new Point(398, 178);
             btnDown.Name = "btnDown";
             btnDown.Size = new Size(140, 34);
             btnDown.TabIndex = 7;
@@ -153,7 +153,7 @@
             pnViusalBg.Controls.Add(pnAnswers);
             pnViusalBg.Location = new Point(3, 72);
             pnViusalBg.Name = "pnViusalBg";
-            pnViusalBg.Size = new Size(389, 171);
+            pnViusalBg.Size = new Size(389, 185);
             pnViusalBg.TabIndex = 12;
             // 
             // pnAnswers
@@ -165,22 +165,25 @@
             pnAnswers.Location = new Point(5, 5);
             pnAnswers.Margin = new Padding(5);
             pnAnswers.Name = "pnAnswers";
-            pnAnswers.Size = new Size(379, 161);
+            pnAnswers.Size = new Size(379, 175);
             pnAnswers.TabIndex = 9;
             // 
-            // answerTools1
+            // answerTools
             // 
+            answerTools.AddEnabled = false;
             answerTools.BackColor = SystemColors.ControlLight;
             answerTools.Dock = DockStyle.Top;
+            answerTools.Guid = new Guid("00000000-0000-0000-0000-000000000000");
             answerTools.Location = new Point(0, 0);
-            answerTools.Name = "answerTools1";
+            answerTools.Name = "answerTools";
+            answerTools.RemoveEnabled = false;
             answerTools.Size = new Size(379, 35);
             answerTools.TabIndex = 3;
             // 
             // btNew
             // 
             btNew.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btNew.Location = new Point(398, 209);
+            btNew.Location = new Point(398, 223);
             btNew.Name = "btNew";
             btNew.Size = new Size(140, 34);
             btNew.TabIndex = 8;
@@ -205,7 +208,7 @@
             Controls.Add(btnDelete);
             Controls.Add(tbxTitle);
             Name = "QuestionSegment";
-            Size = new Size(544, 249);
+            Size = new Size(544, 263);
             pnViusalBg.ResumeLayout(false);
             pnAnswers.ResumeLayout(false);
             ResumeLayout(false);

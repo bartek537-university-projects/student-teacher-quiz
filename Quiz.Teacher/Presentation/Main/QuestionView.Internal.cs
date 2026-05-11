@@ -20,7 +20,7 @@ internal partial class QuestionView
     private HashSet<Guid> GuidsInPanel()
     {
         return [.. panel.Controls
-            .OfType<AnswerSegment>()
+            .OfType<QuestionSegment>()
             .Select(s => s.Guid)];
     }
 

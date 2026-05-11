@@ -47,6 +47,7 @@ public class RecordFactory : IRecordFactory
             new() { Title = RandomAnswer(), IsCorrect = false },
             new() { Title = RandomAnswer(), IsCorrect = false },
             new() { Title = RandomAnswer(), IsCorrect = false },
+            new() { Title = RandomAnswer(), IsCorrect = false },
             ];
 
         Random rng = new();
