@@ -6,8 +6,6 @@ namespace QuizApp.Teacher.Presenter;
 
 internal class QuestionPresenter
 {
-    private const string DEFAULT_QUESTION_TITLE = "";
-
     private readonly IQuestionView _questionView;
 
     private Quiz Quiz
@@ -31,7 +29,7 @@ internal class QuestionPresenter
 
         _questionView = questionView;
 
-        _questionView.OnQuestionAdd += AddEmptyQuestion;
+        _questionView.OnQuestionAdd += QuestionAdd;
         _questionView.OnQuestionTitleChange += QuestionTitleChange;
         _questionView.OnQuestionPlusPointsChange += QuestionPlusPointsChange;
         _questionView.OnQuestionMinusPointsChange += QuestionMinusPointsChange;
@@ -40,14 +38,11 @@ internal class QuestionPresenter
         _questionView.OnQuestionMoveUp += index => QuestionsSwap(index, index - 1);
     }
 
-    private void AddEmptyQuestion(int index)
+    private void QuestionAdd(int index, Question question)
     {
         Quiz = Quiz with
         {
-            Questions = Quiz.Questions.Insert(
-                index,
-                new Question(DEFAULT_QUESTION_TITLE, 0, 0, [])
-                )
+            Questions = Quiz.Questions.Insert(index, question)
         };
     }
 

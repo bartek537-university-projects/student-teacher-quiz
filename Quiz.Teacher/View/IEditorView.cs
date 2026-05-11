@@ -12,8 +12,8 @@ internal interface IEditorView : IHasQuiz
 
     void ShowValidationProblems(string message, int? questionIndex);
 
-    string? AskLoadFile();
-    string? AskSaveFile();
+    string? AskLoadFile(params string[] extensions);
+    string? AskSaveFile(params string[] extensions);
     string? AskPassword();
 
     void ShowInfo(string message);

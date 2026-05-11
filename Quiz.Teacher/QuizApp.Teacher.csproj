@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Presentation\Main\Interfaces\" />
+    <Compile Remove="Presentation\Main\Interfaces\**" />
+    <EmbeddedResource Remove="Presentation\Main\Interfaces\**" />
+    <None Remove="Presentation\Main\Interfaces\**" />
   </ItemGroup>
 
 

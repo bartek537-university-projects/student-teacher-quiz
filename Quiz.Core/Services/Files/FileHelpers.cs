@@ -9,7 +9,7 @@ internal class FileHelpers
 
     public static void WriteAtomic(string filepath, string text)
     {
-        string tempFile = Path.GetTempFileName();
+        string tempFile = $"{filepath}~{Guid.NewGuid()}.tmp";
 
         using (var fs = new FileStream(tempFile,
             FileMode.CreateNew,

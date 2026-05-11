@@ -38,14 +38,14 @@
             btnUp = new Button();
             btnDown = new Button();
             pnViusalBg = new Panel();
-            panel1 = new Panel();
+            pnAnswers = new Panel();
+            answerTools1 = new AnswerTools();
             answerSegment3 = new AnswerSegment();
             answerSegment2 = new AnswerSegment();
             answerSegment1 = new AnswerSegment();
             btCopy = new Button();
-            answerTools1 = new AnswerTools();
             pnViusalBg.SuspendLayout();
-            panel1.SuspendLayout();
+            pnAnswers.SuspendLayout();
             SuspendLayout();
             // 
             // tbxTitle
@@ -55,6 +55,7 @@
             tbxTitle.Name = "tbxTitle";
             tbxTitle.Size = new Size(538, 23);
             tbxTitle.TabIndex = 0;
+            tbxTitle.TextChanged += tbxTitle_TextChanged;
             // 
             // btnDelete
             // 
@@ -66,6 +67,7 @@
             btnDelete.TabIndex = 1;
             btnDelete.Text = "X";
             btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
             // 
             // tbxPlusPoints
             // 
@@ -74,7 +76,7 @@
             tbxPlusPoints.Name = "tbxPlusPoints";
             tbxPlusPoints.Size = new Size(67, 23);
             tbxPlusPoints.TabIndex = 2;
-            tbxPlusPoints.TextChanged += txbPlusPoints_TextChanged;
+            tbxPlusPoints.TextChanged += tbxPlusPoints_TextChanged;
             // 
             // tbxMinusPoints
             // 
@@ -83,6 +85,7 @@
             tbxMinusPoints.Name = "tbxMinusPoints";
             tbxMinusPoints.Size = new Size(67, 23);
             tbxMinusPoints.TabIndex = 3;
+            tbxMinusPoints.TextChanged += tbxMinusPoints_TextChanged;
             // 
             // cbxMinusPoints
             // 
@@ -125,6 +128,7 @@
             btnUp.TabIndex = 10;
             btnUp.Text = "Przesuń w górę";
             btnUp.UseVisualStyleBackColor = true;
+            btnUp.Click += btnUp_Click;
             // 
             // btnDown
             // 
@@ -135,13 +139,14 @@
             btnDown.TabIndex = 11;
             btnDown.Text = "Przesuń w dół";
             btnDown.UseVisualStyleBackColor = true;
+            btnDown.Click += btnDown_Click;
             // 
             // pnViusalBg
             // 
             pnViusalBg.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnViusalBg.AutoScroll = true;
             pnViusalBg.BackColor = SystemColors.AppWorkspace;
-            pnViusalBg.Controls.Add(panel1);
+            pnViusalBg.Controls.Add(pnAnswers);
             pnViusalBg.Location = new Point(3, 72);
             pnViusalBg.Name = "pnViusalBg";
             pnViusalBg.Size = new Size(389, 171);
@@ -149,18 +154,27 @@
             // 
             // panel1
             // 
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panel1.AutoScroll = true;
-            panel1.BackColor = SystemColors.AppWorkspace;
-            panel1.Controls.Add(answerTools1);
-            panel1.Controls.Add(answerSegment3);
-            panel1.Controls.Add(answerSegment2);
-            panel1.Controls.Add(answerSegment1);
-            panel1.Location = new Point(5, 5);
-            panel1.Margin = new Padding(5);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(379, 161);
-            panel1.TabIndex = 13;
+            pnAnswers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnAnswers.AutoScroll = true;
+            pnAnswers.BackColor = SystemColors.AppWorkspace;
+            pnAnswers.Controls.Add(answerTools1);
+            pnAnswers.Controls.Add(answerSegment3);
+            pnAnswers.Controls.Add(answerSegment2);
+            pnAnswers.Controls.Add(answerSegment1);
+            pnAnswers.Location = new Point(5, 5);
+            pnAnswers.Margin = new Padding(5);
+            pnAnswers.Name = "panel1";
+            pnAnswers.Size = new Size(379, 161);
+            pnAnswers.TabIndex = 13;
+            // 
+            // answerTools1
+            // 
+            answerTools1.BackColor = SystemColors.ControlLight;
+            answerTools1.Dock = DockStyle.Top;
+            answerTools1.Location = new Point(0, 105);
+            answerTools1.Name = "answerTools1";
+            answerTools1.Size = new Size(379, 35);
+            answerTools1.TabIndex = 3;
             // 
             // answerSegment3
             // 
@@ -198,15 +212,7 @@
             btCopy.TabIndex = 13;
             btCopy.Text = "Kopiuj";
             btCopy.UseVisualStyleBackColor = true;
-            // 
-            // answerTools1
-            // 
-            answerTools1.BackColor = SystemColors.ControlLight;
-            answerTools1.Dock = DockStyle.Top;
-            answerTools1.Location = new Point(0, 105);
-            answerTools1.Name = "answerTools1";
-            answerTools1.Size = new Size(379, 35);
-            answerTools1.TabIndex = 3;
+            btCopy.Click += btCopy_Click;
             // 
             // QuestionSegment
             // 
@@ -227,7 +233,7 @@
             Name = "QuestionSegment";
             Size = new Size(544, 249);
             pnViusalBg.ResumeLayout(false);
-            panel1.ResumeLayout(false);
+            pnAnswers.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -246,7 +252,7 @@
         private Button btnDown;
         private Panel pnViusalBg;
         private Button btCopy;
-        private Panel panel1;
+        private Panel pnAnswers;
         private AnswerSegment answerSegment3;
         private AnswerSegment answerSegment2;
         private AnswerSegment answerSegment1;

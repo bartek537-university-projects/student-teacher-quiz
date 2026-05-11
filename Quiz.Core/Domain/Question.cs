@@ -7,4 +7,8 @@ public record Question(
     int PlusPoints, // Points for correct answer
     int MinusPoints, // Points for incorrect answer
     ImmutableArray<Answer> Answers
-    );
+    )
+{
+    public Guid Guid { get; init; } = Guid.NewGuid();
+    public Question New() => this with { Guid = Guid.NewGuid() };
+}

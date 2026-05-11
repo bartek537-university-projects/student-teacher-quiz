@@ -6,7 +6,7 @@ namespace QuizApp.Teacher.Presenter;
 
 internal class EditorPresenter
 {
-    private const string DEFAULT_QUIZ_TITLE = "";
+    private const string QUIZ_FILE_EXTENSION = "qz";
 
     private readonly IEditorView _editorView;
     private readonly IQuizAccessor _quizAccessor;
@@ -44,11 +44,19 @@ internal class EditorPresenter
 
     private void QuizClear(bool requireConfirmation)
     {
+        static Quiz MakeDefaultQuiz() => new("Nowy Quiz", [
+            new Question("Pytanie 1", 1, 0, [
+                new Answer("Odpowiedź A", true),
+                new Answer("Odpowiedź B", false),
+                new Answer("Odpowiedź C", false)
+                ])
+            ]);
+
         if (!requireConfirmation || _editorView.AskConfirm(
             "Czy na pewno chcesz wyczyścić quiz? Wszystkie niezapisane zmiany zostaną utracone."
             ))
         {
-            Quiz = new Quiz(DEFAULT_QUIZ_TITLE, []);
+            Quiz = MakeDefaultQuiz();
         }
     }
 
@@ -56,7 +64,7 @@ internal class EditorPresenter
     {
         try
         {
-            string? filepath = _editorView.AskLoadFile();
+            string? filepath = _editorView.AskLoadFile(QUIZ_FILE_EXTENSION);
             if (filepath == null) return;
 
             string? password = _editorView.AskPassword();
@@ -90,7 +98,7 @@ internal class EditorPresenter
 
         try
         {
-            string? filepath = _editorView.AskSaveFile();
+            string? filepath = _editorView.AskSaveFile(QUIZ_FILE_EXTENSION);
             if (filepath == null) return;
 
             string? password = _editorView.AskPassword();

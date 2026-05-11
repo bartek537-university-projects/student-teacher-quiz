@@ -1,8 +1,10 @@
-﻿namespace QuizApp.Teacher.View;
+﻿using QuizApp.Core.Domain;
+
+namespace QuizApp.Teacher.View;
 
 internal interface IQuestionView : IHasQuiz
 {
-    event Action<int>? OnQuestionAdd;
+    event Action<int, Question>? OnQuestionAdd;
     event Action<int, string>? OnQuestionTitleChange;
     event Action<int, int>? OnQuestionPlusPointsChange;
     event Action<int, int>? OnQuestionMinusPointsChange;

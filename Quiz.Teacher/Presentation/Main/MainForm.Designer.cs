@@ -1,4 +1,6 @@
-﻿namespace QuizApp.Teacher.Presentation.Main;
+﻿using QuizApp.Teacher.View;
+
+namespace QuizApp.Teacher.Presentation.Main;
 
 partial class MainForm
 {
@@ -30,12 +32,10 @@ partial class MainForm
     {
         button1 = new Button();
         btnLoad = new Button();
-        txbTitle = new TextBox();
+        tbxTitle = new TextBox();
         btnClear = new Button();
         pnQuestions = new Panel();
         pnVisualBg = new Panel();
-        questionSegment1 = new QuestionSegment();
-        questionSegment2 = new QuestionSegment();
         pnQuestions.SuspendLayout();
         pnVisualBg.SuspendLayout();
         SuspendLayout();
@@ -64,12 +64,12 @@ partial class MainForm
         // 
         // txbTitle
         // 
-        txbTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        txbTitle.Location = new Point(12, 12);
-        txbTitle.Name = "txbTitle";
-        txbTitle.Size = new Size(820, 23);
-        txbTitle.TabIndex = 2;
-        txbTitle.TextChanged += txbTitle_TextChanged;
+        tbxTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        tbxTitle.Location = new Point(12, 12);
+        tbxTitle.Name = "txbTitle";
+        tbxTitle.Size = new Size(820, 23);
+        tbxTitle.TabIndex = 2;
+        tbxTitle.TextChanged += txbTitle_TextChanged;
         // 
         // btnClear
         // 
@@ -87,8 +87,6 @@ partial class MainForm
         pnQuestions.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         pnQuestions.AutoScroll = true;
         pnQuestions.BackColor = SystemColors.ControlDarkDark;
-        pnQuestions.Controls.Add(questionSegment2);
-        pnQuestions.Controls.Add(questionSegment1);
         pnQuestions.Location = new Point(5, 5);
         pnQuestions.Margin = new Padding(5);
         pnQuestions.Name = "pnQuestions";
@@ -106,24 +104,6 @@ partial class MainForm
         pnVisualBg.Size = new Size(564, 508);
         pnVisualBg.TabIndex = 7;
         // 
-        // questionSegment1
-        // 
-        questionSegment1.BackColor = Color.Gainsboro;
-        questionSegment1.Dock = DockStyle.Top;
-        questionSegment1.Location = new Point(0, 0);
-        questionSegment1.Name = "questionSegment1";
-        questionSegment1.Size = new Size(554, 249);
-        questionSegment1.TabIndex = 0;
-        // 
-        // questionSegment2
-        // 
-        questionSegment2.BackColor = Color.Gainsboro;
-        questionSegment2.Dock = DockStyle.Top;
-        questionSegment2.Location = new Point(0, 249);
-        questionSegment2.Name = "questionSegment2";
-        questionSegment2.Size = new Size(554, 249);
-        questionSegment2.TabIndex = 1;
-        // 
         // MainForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -134,10 +114,10 @@ partial class MainForm
         Controls.Add(btnLoad);
         Controls.Add(button1);
         Controls.Add(btnClear);
-        Controls.Add(txbTitle);
+        Controls.Add(tbxTitle);
         Name = "MainForm";
         Text = "Aplikacja do tworzenia quizu - Teacher";
-        Load += Form1_Load;
+        Load += MainForm_Load;
         pnQuestions.ResumeLayout(false);
         pnVisualBg.ResumeLayout(false);
         ResumeLayout(false);
@@ -148,10 +128,8 @@ partial class MainForm
 
     private Button button1;
     private Button btnLoad;
-    private TextBox txbTitle;
+    private TextBox tbxTitle;
     private Button btnClear;
     private Panel pnQuestions;
     private Panel pnVisualBg;
-    private QuestionSegment questionSegment2;
-    private QuestionSegment questionSegment1;
 }

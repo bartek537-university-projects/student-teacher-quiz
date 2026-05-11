@@ -6,9 +6,6 @@ namespace QuizApp.Teacher.Presenter;
 
 internal class AnswerPresenter
 {
-    private const string DEFAULT_ANSWER_TITLE = "";
-    private const bool DEFAULT_ANSWER_IS_CORRECT = false;
-
     private readonly IAnswerView _answerView;
 
     private Quiz Quiz
@@ -40,16 +37,11 @@ internal class AnswerPresenter
         _answerView.OnAnswerMoveUp += (i0, index) => AnswersSwap(i0, index, index - 1);
     }
 
-    private void AddEmptyAnswer(int i0, int index)
+    private void AddEmptyAnswer(int i0, int index, Answer answer)
     {
         Questions[i0] = Questions[i0] with
         {
-            Answers = Questions[i0].Answers.Insert(
-                index,
-                new Answer(
-                    DEFAULT_ANSWER_TITLE,
-                    DEFAULT_ANSWER_IS_CORRECT
-                    ))
+            Answers = Questions[i0].Answers.Insert(index, answer)
         };
     }
 
