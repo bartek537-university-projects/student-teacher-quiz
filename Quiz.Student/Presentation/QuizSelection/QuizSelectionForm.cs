@@ -1,8 +1,8 @@
 namespace QuizApp.Student.Presentation.Main;
 
-public partial class MainForm : Form
+public partial class QuizSelectionForm : Form
 {
-    public MainForm()
+    public QuizSelectionForm()
     {
         InitializeComponent();
     }

@@ -4,15 +4,20 @@ namespace QuizApp.Student;
 
 internal static class Program
 {
-    /// <summary>
-    ///  The main entry point for the application.
-    /// </summary>
+    private const string _appMutexId = "QuizApp.Student.Mutex";
+
     [STAThread]
     private static void Main()
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
+        using Mutex mutex = new(false, _appMutexId, out bool isOnlyAppInstance);
+
+        if (!isOnlyAppInstance)
+        {
+            _ = MessageBox.Show("The app is already running.");
+            return;
+        }
+
         ApplicationConfiguration.Initialize();
-        Application.Run(new MainForm());
+        Application.Run(new QuizSelectionForm());
     }
 }

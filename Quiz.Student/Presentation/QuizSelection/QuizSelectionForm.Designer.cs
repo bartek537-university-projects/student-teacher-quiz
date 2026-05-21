@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Student.Presentation.Main;
 
-partial class MainForm
+partial class QuizSelectionForm
 {
     /// <summary>
     ///  Required designer variable.
@@ -28,10 +28,18 @@ partial class MainForm
     /// </summary>
     private void InitializeComponent()
     {
-        components = new System.ComponentModel.Container();
+        SuspendLayout();
+        // 
+        // QuizSelectionForm
+        // 
+        AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 450);
-        Text = "Form1";
+        ClientSize = new Size(240, 217);
+        MaximumSize = new Size(256, 1024);
+        MinimumSize = new Size(256, 256);
+        Name = "QuizSelectionForm";
+        Text = "Quiz";
+        ResumeLayout(false);
     }
 
     #endregion

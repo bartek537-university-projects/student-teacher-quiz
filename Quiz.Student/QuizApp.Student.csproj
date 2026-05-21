@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Presentation\Main\Interfaces\" />
+    <Folder Include="Presentation\QuizSelection\Interfaces\" />
   </ItemGroup>
 
 </Project>
