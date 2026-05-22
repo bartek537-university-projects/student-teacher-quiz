@@ -1,4 +1,5 @@
 using QuizApp.Student.Presentation.Main;
+using QuizApp.Student.Presentation.QuizSelection;
 
 namespace QuizApp.Student;
 
@@ -18,6 +19,11 @@ internal static class Program
         }
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new QuizSelectionForm());
+
+        QuizSelectionView view = new();
+        QuizSelectionPresenter presenter = new(view);
+        view.Presenter = presenter;
+
+        System.Windows.Forms.Application.Run(view);
     }
 }
