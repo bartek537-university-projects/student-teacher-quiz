@@ -20,7 +20,7 @@ internal static class Program
             return;
         }
 
-        InMemoryRecentFilesRepository recentFilesRepository = new();
+        FileSystemRecentFilesRepository recentFilesRepository = new(@".\recents.json");
         GetRecentFiles.Handler getRecentFilesHandler = new(recentFilesRepository);
         AddRecentFile.Handler addRecentFileHandler = new(recentFilesRepository);
 

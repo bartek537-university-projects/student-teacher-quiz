@@ -62,7 +62,7 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
 
     private async Task AddRecentFileAsync(Uri path, CancellationToken cancellationToken)
     {
-        DateTime now = _timeProvider.GetLocalNow().DateTime;
+        DateTime now = _timeProvider.GetUtcNow().DateTime;
 
         _ = await _addRecentFile
             .HandleAsync(new(path, now), cancellationToken);
