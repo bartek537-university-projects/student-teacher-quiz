@@ -11,7 +11,15 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
     public event Action<Uri, string?>? FileSelect;
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public IQuizSelectionPresenter Presenter { get; set { field = value; SetupPresenter(); } } = null!;
+    public IQuizSelectionPresenter Presenter
+    {
+        get;
+        set
+        {
+            field = value;
+            SetupPresenter();
+        }
+    } = null!;
 
     private readonly PasswordInputView passwordInputView = new();
 
