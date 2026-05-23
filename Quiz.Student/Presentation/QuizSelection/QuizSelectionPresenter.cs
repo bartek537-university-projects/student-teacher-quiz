@@ -1,7 +1,9 @@
 ﻿using QuizApp.Student.Application.Common;
+using QuizApp.Student.Application.Quiz;
 using QuizApp.Student.Application.Recents;
 using QuizApp.Student.Domain.Entities;
 using QuizApp.Student.Presentation.QuizSelection.Interfaces;
+using DomainQuiz = QuizApp.Core.Domain.Quiz;
 
 namespace QuizApp.Student.Presentation.QuizSelection;
 
@@ -21,6 +23,7 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
 
     private readonly TimeProvider _timeProvider;
 
+    private readonly IRequestHandler<GetQuiz.Query, GetQuiz.Response> _getQuiz;
     private readonly IRequestHandler<AddRecentFile.Command, AddRecentFile.Response> _addRecentFile;
     private readonly IRequestHandler<GetRecentFiles.Query, GetRecentFiles.Response> _getRecentFiles;
 
@@ -28,12 +31,14 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
 
     public QuizSelectionPresenter(IQuizSelectionView view,
         TimeProvider timeProvider,
+        IRequestHandler<GetQuiz.Query, GetQuiz.Response> getQuiz,
         IRequestHandler<AddRecentFile.Command, AddRecentFile.Response> addRecentFiles,
         IRequestHandler<GetRecentFiles.Query, GetRecentFiles.Response> getRecentFiles)
     {
         _view = view;
         _timeProvider = timeProvider;
 
+        _getQuiz = getQuiz;
         _addRecentFile = addRecentFiles;
         _getRecentFiles = getRecentFiles;
 
@@ -48,8 +53,20 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
 
     private async Task OnLocalFileSelectedAsync(Uri path, CancellationToken cancellationToken)
     {
+        var quiz = await GetQuizAsync(path, cancellationToken);
+        // TODO: Add password prompt.
+        // TODO: Open quiz window.
+
         await AddRecentFileAsync(path, cancellationToken);
         await UpdateRecentFilesAsync(cancellationToken);
+    }
+
+    private async Task<DomainQuiz?> GetQuizAsync(Uri path, CancellationToken cancellationToken)
+    {
+        GetQuiz.Response response = await _getQuiz
+            .HandleAsync(new(path), cancellationToken);
+
+        return response.Quiz;
     }
 
     private async Task UpdateRecentFilesAsync(CancellationToken cancellationToken)

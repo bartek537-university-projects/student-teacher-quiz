@@ -12,6 +12,14 @@ internal class FileSystemRecentFilesRepository(string path) : IRecentFilesReposi
         return recents?.Files ?? [];
     }
 
+    public Task ReplaceAllAsync(IReadOnlyList<RecentFile> files, CancellationToken cancellationToken)
+    {
+        Aggregates.Recents recents = new(files);
+        WriteRecents(path, recents);
+
+        return Task.CompletedTask;
+    }
+
     private static Aggregates.Recents? ReadRecents(string path)
     {
         if (!File.Exists(path))
@@ -28,14 +36,6 @@ internal class FileSystemRecentFilesRepository(string path) : IRecentFilesReposi
         {
             return null;
         }
-    }
-
-    public Task ReplaceAllAsync(IReadOnlyList<RecentFile> files, CancellationToken cancellationToken)
-    {
-        Aggregates.Recents recents = new(files);
-        WriteRecents(path, recents);
-
-        return Task.CompletedTask;
     }
 
     private static void WriteRecents(string path, Aggregates.Recents recents)
