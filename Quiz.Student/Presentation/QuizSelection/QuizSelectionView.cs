@@ -33,12 +33,16 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
 
         foreach (RecentFile file in files)
         {
+            string path = file.Path.AbsolutePath;
+
             ListViewItem item = new()
             {
                 ImageKey = "Report",
                 Tag = file,
-                Text = file.Path.AbsolutePath,
+                Text = path,
+                ToolTipText = path,
             };
+
             _ = lvRecentFiles.Items.Add(item);
         }
     }
@@ -79,18 +83,18 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
 
     private void OnRecentFileDoubleClicked()
     {
-        if (GetSelectedRecentFile() is Uri path)
+        if (GetSelectedRecentFile() is RecentFile file)
         {
-            LocalFileSelect?.Invoke(path);
+            LocalFileSelect?.Invoke(file.Path);
         }
     }
 
-    private Uri? GetSelectedRecentFile()
+    private RecentFile? GetSelectedRecentFile()
     {
         if (lvRecentFiles.SelectedIndices.Count < 1)
         {
             return null;
         }
-        return lvRecentFiles.Items[0].Tag as Uri;
+        return lvRecentFiles.SelectedItems[0].Tag as RecentFile;
     }
 }

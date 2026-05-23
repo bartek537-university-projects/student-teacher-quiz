@@ -1,3 +1,5 @@
+using QuizApp.Student.Application.Recents;
+using QuizApp.Student.Infrastructure.Recents;
 using QuizApp.Student.Presentation.Main;
 using QuizApp.Student.Presentation.QuizSelection;
 
@@ -18,10 +20,14 @@ internal static class Program
             return;
         }
 
+        InMemoryRecentFilesRepository recentFilesRepository = new();
+        GetRecentFiles.Handler getRecentFilesHandler = new(recentFilesRepository);
+        AddRecentFile.Handler addRecentFileHandler = new(recentFilesRepository);
+
         ApplicationConfiguration.Initialize();
 
         QuizSelectionView view = new();
-        QuizSelectionPresenter presenter = new(view);
+        QuizSelectionPresenter presenter = new(view, TimeProvider.System, addRecentFileHandler, getRecentFilesHandler);
         view.Presenter = presenter;
 
         System.Windows.Forms.Application.Run(view);

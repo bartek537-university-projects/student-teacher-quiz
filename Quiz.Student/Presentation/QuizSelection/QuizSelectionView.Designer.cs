@@ -51,7 +51,7 @@ partial class QuizSelectionView
         lbOpenRecent.Location = new Point(12, 74);
         lbOpenRecent.Name = "lbOpenRecent";
         lbOpenRecent.Size = new Size(72, 15);
-        lbOpenRecent.TabIndex = 0;
+        lbOpenRecent.TabIndex = 2;
         lbOpenRecent.Text = "Open recent";
         // 
         // btnOpenLocalFile
@@ -74,7 +74,7 @@ partial class QuizSelectionView
         lbGetStarted.Location = new Point(12, 9);
         lbGetStarted.Name = "lbGetStarted";
         lbGetStarted.Size = new Size(64, 15);
-        lbGetStarted.TabIndex = 2;
+        lbGetStarted.TabIndex = 0;
         lbGetStarted.Text = "Get started";
         // 
         // columnHeader1
@@ -120,8 +120,8 @@ partial class QuizSelectionView
         Controls.Add(lbGetStarted);
         Controls.Add(btnOpenLocalFile);
         Controls.Add(lbOpenRecent);
-        MaximumSize = new Size(256, 1024);
-        MinimumSize = new Size(256, 256);
+        FormBorderStyle = FormBorderStyle.FixedSingle;
+        MaximizeBox = false;
         Name = "QuizSelectionView";
         Text = "Quiz";
         Load += QuizSelectionView_Load;
