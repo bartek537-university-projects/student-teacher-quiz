@@ -1,4 +1,5 @@
 using QuizApp.Student.Domain.Entities;
+using QuizApp.Student.Presentation.QuizSelection;
 using QuizApp.Student.Presentation.QuizSelection.Interfaces;
 using System.ComponentModel;
 
@@ -7,14 +8,18 @@ namespace QuizApp.Student.Presentation.Main;
 internal partial class QuizSelectionView : Form, IQuizSelectionView
 {
     public event Action? Ready;
-    public event Action<Uri>? LocalFileSelect;
+    public event Action<Uri, string?>? FileSelect;
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public IQuizSelectionPresenter Presenter { get; set { field = value; SetupPresenter(); } } = null!;
 
+    private readonly PasswordInputView passwordInputView = new();
+
     public QuizSelectionView()
     {
         InitializeComponent();
+
+        passwordInputView.SubmitClick += PasswordInputView_SubmitClick;
     }
 
     private void SetupPresenter()
@@ -59,20 +64,20 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
 
     private void OnOpenFileClicked()
     {
-        if (SelectLocalFile() is Uri path)
+        if (OpenSelectFileDialog() is Uri path)
         {
-            LocalFileSelect?.Invoke(path);
+            OnFileSelected(path);
         }
     }
 
-    private Uri? SelectLocalFile()
+    private Uri? OpenSelectFileDialog()
     {
-        if (ofdOpenLocalFileDialog.ShowDialog() != DialogResult.OK)
+        if (ofdOpenFileDialog.ShowDialog() != DialogResult.OK)
         {
             return null;
         }
 
-        string path = ofdOpenLocalFileDialog.FileName;
+        string path = ofdOpenFileDialog.FileName;
         return new Uri(path);
     }
 
@@ -85,7 +90,7 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
     {
         if (GetSelectedRecentFile() is RecentFile file)
         {
-            LocalFileSelect?.Invoke(file.Path);
+            OnFileSelected(file.Path);
         }
     }
 
@@ -96,5 +101,37 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
             return null;
         }
         return lvRecentFiles.SelectedItems[0].Tag as RecentFile;
+    }
+
+    private void OnFileSelected(Uri path, string? secret = null)
+    {
+        FileSelect?.Invoke(path, secret);
+    }
+
+    public void ShowPasswordPrompt(Uri path)
+    {
+        bool isRepeated = passwordInputView.Visible && passwordInputView.Path == path;
+
+        passwordInputView.Path = path;
+        passwordInputView.IsInvalid = isRepeated;
+
+        if (!passwordInputView.Visible)
+        {
+            _ = passwordInputView.ShowDialog(this);
+        }
+    }
+
+    private void PasswordInputView_SubmitClick()
+    {
+        Uri path = passwordInputView.Path!;
+        string secret = passwordInputView.Password;
+
+        OnFileSelected(path, secret);
+    }
+
+    public void HidePasswordPrompt()
+    {
+        passwordInputView.Hide();
+        passwordInputView.Path = null;
     }
 }

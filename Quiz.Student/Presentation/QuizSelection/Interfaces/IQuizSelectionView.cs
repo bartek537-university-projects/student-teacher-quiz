@@ -3,5 +3,8 @@
 internal interface IQuizSelectionView
 {
     event Action Ready;
-    event Action<Uri> LocalFileSelect;
+    event Action<Uri, string?> FileSelect;
+
+    void ShowPasswordPrompt(Uri path);
+    void HidePasswordPrompt();
 }

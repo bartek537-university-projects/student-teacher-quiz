@@ -6,14 +6,14 @@ namespace QuizApp.Student.Application.Quiz;
 
 public static class GetQuiz
 {
-    public record Query(Uri Path) : IRequest<Response>;
+    public record Query(Uri Path, string? Secret) : IRequest<Response>;
 
     public class Handler(IQuizRepository quizRepository) : IRequestHandler<Query, Response>
     {
         public async Task<Response> HandleAsync(Query request, CancellationToken cancellationToken)
         {
-            var quiz = await quizRepository
-                .GetSingleAsync(request.Path);
+            DomainQuiz? quiz = await quizRepository
+                .GetSingleAsync(request.Path, request.Secret);
 
             return new Response(quiz);
         }

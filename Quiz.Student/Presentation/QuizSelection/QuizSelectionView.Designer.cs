@@ -32,7 +32,7 @@ partial class QuizSelectionView
         ListViewItem listViewItem1 = new ListViewItem("C:\\ProgramData\\Apple Computer\\iTunes\\adi", 0);
         ListViewItem listViewItem2 = new ListViewItem("C:\\ProgramData\\Apple\\Music", 0);
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuizSelectionView));
-        ofdOpenLocalFileDialog = new OpenFileDialog();
+        ofdOpenFileDialog = new OpenFileDialog();
         lbOpenRecent = new Label();
         btnOpenLocalFile = new Button();
         lbGetStarted = new Label();
@@ -43,7 +43,7 @@ partial class QuizSelectionView
         // 
         // ofdOpenLocalFileDialog
         // 
-        ofdOpenLocalFileDialog.Filter = "Quiz files|*.qz|All files|*.*";
+        ofdOpenFileDialog.Filter = "Quiz files|*.qz|All files|*.*";
         // 
         // lbOpenRecent
         // 
@@ -131,7 +131,7 @@ partial class QuizSelectionView
 
     #endregion
 
-    private OpenFileDialog ofdOpenLocalFileDialog;
+    private OpenFileDialog ofdOpenFileDialog;
     private Label lbOpenRecent;
     private Button btnOpenLocalFile;
     private Label lbGetStarted;

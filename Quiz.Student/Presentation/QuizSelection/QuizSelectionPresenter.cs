@@ -43,7 +43,7 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
         _getRecentFiles = getRecentFiles;
 
         _view.Ready += () => OnViewReadyAsync(CancellationToken.None).Wait();
-        _view.LocalFileSelect += path => OnLocalFileSelectedAsync(path, CancellationToken.None).Wait();
+        _view.FileSelect += (path, secret) => OnLocalFileSelectedAsync(path, secret ?? string.Empty, CancellationToken.None).Wait();
     }
 
     private async Task OnViewReadyAsync(CancellationToken cancellationToken)
@@ -51,20 +51,25 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
         await UpdateRecentFilesAsync(cancellationToken);
     }
 
-    private async Task OnLocalFileSelectedAsync(Uri path, CancellationToken cancellationToken)
+    private async Task OnLocalFileSelectedAsync(Uri path, string secret, CancellationToken cancellationToken)
     {
-        var quiz = await GetQuizAsync(path, cancellationToken);
-        // TODO: Add password prompt.
-        // TODO: Open quiz window.
+        DomainQuiz? quiz = await GetQuizAsync(path, secret, cancellationToken);
 
+        if (quiz is null)
+        {
+            _view.ShowPasswordPrompt(path);
+            return;
+        }
+
+        _view.HidePasswordPrompt();
         await AddRecentFileAsync(path, cancellationToken);
         await UpdateRecentFilesAsync(cancellationToken);
     }
 
-    private async Task<DomainQuiz?> GetQuizAsync(Uri path, CancellationToken cancellationToken)
+    private async Task<DomainQuiz?> GetQuizAsync(Uri path, string secret, CancellationToken cancellationToken)
     {
         GetQuiz.Response response = await _getQuiz
-            .HandleAsync(new(path), cancellationToken);
+            .HandleAsync(new(path, secret), cancellationToken);
 
         return response.Quiz;
     }

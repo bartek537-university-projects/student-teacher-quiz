@@ -6,7 +6,7 @@ namespace QuizApp.Student.Infrastructure.Quiz;
 
 internal class FileSystemQuizRepository : IQuizRepository
 {
-    public Task<DomainQuiz?> GetSingleAsync(Uri path)
+    public Task<DomainQuiz?> GetSingleAsync(Uri path, string? secret)
     {
         DomainQuiz? quiz = ReadQuiz(path);
         return Task.FromResult(quiz);
