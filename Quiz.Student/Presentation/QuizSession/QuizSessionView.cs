@@ -26,6 +26,13 @@ internal partial class QuizSessionView : Form, IQuizSessionView
     public QuizSessionView()
     {
         InitializeComponent();
+
+        tSessionTime.Tick += UpdateElapsedTime;
+    }
+
+    private void UpdateElapsedTime(object? sender, EventArgs e)
+    {
+        lbSessionTime.Text = Presenter.ElapsedTime.ToString(@"mm\:ss\.fff");
     }
 
     private void SetupPresenter()
@@ -35,8 +42,38 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
     private void OnStateChanged()
     {
-        btnStartQuiz.Enabled = Presenter.State == Values.QuizSessionState.Initialized;
-        btnFinishQuiz.Enabled = Presenter.State == Values.QuizSessionState.Started;
+        switch (Presenter.State)
+        {
+            case Values.QuizSessionState.Initialized:
+                InitializeQuiz();
+                break;
+            case Values.QuizSessionState.Started:
+                StartQuiz();
+                break;
+            case Values.QuizSessionState.Finished:
+                FinishQuiz();
+                break;
+        }
+    }
+
+    private void InitializeQuiz()
+    {
+        btnStartQuiz.Enabled = true;
+        btnFinishQuiz.Enabled = false;
+    }
+
+    private void StartQuiz()
+    {
+        tSessionTime.Start();
+        btnStartQuiz.Enabled = false;
+        btnFinishQuiz.Enabled = true;
+    }
+
+    private void FinishQuiz()
+    {
+        tSessionTime.Stop();
+        btnStartQuiz.Enabled = false;
+        btnFinishQuiz.Enabled = false;
     }
 
     private void QuizSessionView_Load(object sender, EventArgs e)

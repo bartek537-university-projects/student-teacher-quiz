@@ -28,12 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuizSessionView));
             scMainLayout = new SplitContainer();
+            pictureBox1 = new PictureBox();
+            lbSessionTime = new Label();
             btnFinishQuiz = new Button();
             btnStartQuiz = new Button();
+            tSessionTime = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)scMainLayout).BeginInit();
             scMainLayout.Panel1.SuspendLayout();
             scMainLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // scMainLayout
@@ -45,16 +51,37 @@
             // 
             // scMainLayout.Panel1
             // 
+            scMainLayout.Panel1.Controls.Add(pictureBox1);
+            scMainLayout.Panel1.Controls.Add(lbSessionTime);
             scMainLayout.Panel1.Controls.Add(btnFinishQuiz);
             scMainLayout.Panel1.Controls.Add(btnStartQuiz);
             scMainLayout.Size = new Size(554, 326);
             scMainLayout.SplitterDistance = 200;
             scMainLayout.TabIndex = 0;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.InitialImage = null;
+            pictureBox1.Location = new Point(12, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(16, 16);
+            pictureBox1.TabIndex = 3;
+            pictureBox1.TabStop = false;
+            // 
+            // lbSessionTime
+            // 
+            lbSessionTime.AutoSize = true;
+            lbSessionTime.Location = new Point(34, 14);
+            lbSessionTime.Name = "lbSessionTime";
+            lbSessionTime.Size = new Size(55, 15);
+            lbSessionTime.TabIndex = 2;
+            lbSessionTime.Text = "00:00.000";
+            // 
             // btnFinishQuiz
             // 
             btnFinishQuiz.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnFinishQuiz.Image = Properties.Resources.Stop;
+            btnFinishQuiz.Image = (Image)resources.GetObject("btnFinishQuiz.Image");
             btnFinishQuiz.Location = new Point(3, 291);
             btnFinishQuiz.Name = "btnFinishQuiz";
             btnFinishQuiz.Size = new Size(194, 32);
@@ -68,7 +95,7 @@
             // btnStartQuiz
             // 
             btnStartQuiz.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnStartQuiz.Image = Properties.Resources.Run;
+            btnStartQuiz.Image = (Image)resources.GetObject("btnStartQuiz.Image");
             btnStartQuiz.Location = new Point(3, 257);
             btnStartQuiz.Name = "btnStartQuiz";
             btnStartQuiz.Size = new Size(194, 32);
@@ -78,6 +105,10 @@
             btnStartQuiz.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnStartQuiz.UseVisualStyleBackColor = true;
             btnStartQuiz.Click += btnStartQuiz_Click;
+            // 
+            // tSessionTime
+            // 
+            tSessionTime.Interval = 50;
             // 
             // QuizSessionView
             // 
@@ -89,8 +120,10 @@
             Text = "QuizSessionView";
             Load += QuizSessionView_Load;
             scMainLayout.Panel1.ResumeLayout(false);
+            scMainLayout.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)scMainLayout).EndInit();
             scMainLayout.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -99,5 +132,8 @@
         private SplitContainer scMainLayout;
         private Button btnStartQuiz;
         private Button btnFinishQuiz;
+        private Label lbSessionTime;
+        private System.Windows.Forms.Timer tSessionTime;
+        private PictureBox pictureBox1;
     }
 }

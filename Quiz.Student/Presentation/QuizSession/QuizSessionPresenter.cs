@@ -7,7 +7,11 @@ namespace QuizApp.Student.Presentation.QuizSession;
 internal class QuizSessionPresenter : IQuizSessionPresenter
 {
     private readonly IQuizSessionView _view;
+    private readonly TimeProvider _timeProvider;
     private readonly Quiz _quiz;
+
+    private DateTime? _timeStarted;
+    private readonly DateTime? _timeFinished;
 
     public QuizSessionState State
     {
@@ -24,11 +28,16 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
         }
     } = QuizSessionState.Initialized;
 
+    public TimeSpan ElapsedTime => GetElapsedTime();
+
     public event Action? StateChange;
 
-    public QuizSessionPresenter(IQuizSessionView view, Quiz quiz)
+    public QuizSessionPresenter(IQuizSessionView view,
+        TimeProvider timeProvider,
+        Quiz quiz)
     {
         _view = view;
+        _timeProvider = timeProvider;
         _quiz = quiz;
 
         _view.Ready += OnViewReady;
@@ -44,11 +53,49 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 
     private void OnStartClicked()
     {
+        StartQuiz();
+    }
+
+    private void StartQuiz()
+    {
+        if (State != QuizSessionState.Initialized)
+        {
+            return;
+        }
+
+        _timeStarted = GetCurrentDateTime();
         State = QuizSessionState.Started;
     }
 
     private void OnStopClicked()
     {
+        FinishQuiz();
+    }
+
+    private void FinishQuiz()
+    {
+        if (State != QuizSessionState.Started)
+        {
+            return;
+        }
+
         State = QuizSessionState.Finished;
+    }
+
+    private TimeSpan GetElapsedTime()
+    {
+        if (_timeStarted is not { } start)
+        {
+            return TimeSpan.Zero;
+        }
+        DateTime end = _timeFinished
+            ?? GetCurrentDateTime();
+
+        return end - start;
+    }
+
+    private DateTime GetCurrentDateTime()
+    {
+        return _timeProvider.GetUtcNow().DateTime;
     }
 }

@@ -61,7 +61,7 @@ internal static class Program
         };
 
         QuizSessionView view = new();
-        QuizSessionPresenter presenter = new(view, quiz);
+        QuizSessionPresenter presenter = new(view, TimeProvider.System, quiz);
         view.Presenter = presenter;
 
         System.Windows.Forms.Application.Run(view);
