@@ -28,6 +28,42 @@ internal partial class QuizSessionView : Form, IQuizSessionView
         InitializeComponent();
 
         tSessionTime.Tick += UpdateElapsedTime;
+
+        // TODO: Move this to appropriate layers.
+        QuizQuestionView view = new()
+        {
+            Dock = DockStyle.Fill
+        };
+
+        QuizQuestionPresenter presenter = new(view);
+        view.Presenter = presenter;
+        presenter.Questions = [
+            new Core.Domain.Question() {
+                Title = "Ile nóg ma hulajnoga?",
+                PlusPoints = 2,
+                MinusPoints = 0,
+                Answers = [
+                    new Core.Domain.Answer() { Title = "Jedną", IsCorrect = true },
+                    new Core.Domain.Answer() { Title = "Dwie", IsCorrect = false },
+                    new Core.Domain.Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
+                    new Core.Domain.Answer() { Title = "Sto", IsCorrect = false },
+                ]
+            },
+            new Core.Domain.Question() {
+                Title = "Ile rąk ma stonoga?",
+                PlusPoints = 2,
+                MinusPoints = 4,
+                Answers = [
+                    new Core.Domain.Answer() { Title = "Jedną", IsCorrect = false },
+                    new Core.Domain.Answer() { Title = "Dwie", IsCorrect = false },
+                    new Core.Domain.Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
+                    new Core.Domain.Answer() { Title = "Sto", IsCorrect = false },
+                ]
+            }
+        ];
+
+        scMainLayout.Panel2.Controls.Clear();
+        scMainLayout.Panel2.Controls.Add(view);
     }
 
     private void UpdateElapsedTime(object? sender, EventArgs e)

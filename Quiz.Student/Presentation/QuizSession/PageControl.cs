@@ -36,9 +36,9 @@ public partial class PageControl : UserControl
     private void UpdatePages()
     {
         btnPrevious.Enabled = CurrentPage - 1 >= 1;
-        btnNext.Enabled = CurrentPage + 1 < PageCount;
+        btnNext.Enabled = CurrentPage < PageCount;
 
-        var pageText = $"{CurrentPage} of {PageCount}";
+        string pageText = $"{CurrentPage} of {PageCount}";
         lbPage.Text = pageText;
     }
 

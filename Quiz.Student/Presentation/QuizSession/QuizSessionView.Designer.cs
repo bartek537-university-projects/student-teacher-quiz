@@ -35,9 +35,11 @@
             lbSessionTime = new Label();
             btnFinishQuiz = new Button();
             btnStartQuiz = new Button();
+            quizQuestionView1 = new QuizQuestionView();
             tSessionTime = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)scMainLayout).BeginInit();
             scMainLayout.Panel1.SuspendLayout();
+            scMainLayout.Panel2.SuspendLayout();
             scMainLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -55,6 +57,10 @@
             scMainLayout.Panel1.Controls.Add(lbSessionTime);
             scMainLayout.Panel1.Controls.Add(btnFinishQuiz);
             scMainLayout.Panel1.Controls.Add(btnStartQuiz);
+            // 
+            // scMainLayout.Panel2
+            // 
+            scMainLayout.Panel2.Controls.Add(quizQuestionView1);
             scMainLayout.Size = new Size(554, 326);
             scMainLayout.SplitterDistance = 200;
             scMainLayout.TabIndex = 0;
@@ -81,13 +87,11 @@
             // btnFinishQuiz
             // 
             btnFinishQuiz.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnFinishQuiz.Image = (Image)resources.GetObject("btnFinishQuiz.Image");
             btnFinishQuiz.Location = new Point(3, 291);
             btnFinishQuiz.Name = "btnFinishQuiz";
             btnFinishQuiz.Size = new Size(194, 32);
             btnFinishQuiz.TabIndex = 1;
-            btnFinishQuiz.Text = "Finish quiz";
-            btnFinishQuiz.TextAlign = ContentAlignment.MiddleRight;
+            btnFinishQuiz.Text = "Finish";
             btnFinishQuiz.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnFinishQuiz.UseVisualStyleBackColor = true;
             btnFinishQuiz.Click += btnFinishQuiz_Click;
@@ -95,16 +99,22 @@
             // btnStartQuiz
             // 
             btnStartQuiz.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnStartQuiz.Image = (Image)resources.GetObject("btnStartQuiz.Image");
             btnStartQuiz.Location = new Point(3, 257);
             btnStartQuiz.Name = "btnStartQuiz";
             btnStartQuiz.Size = new Size(194, 32);
             btnStartQuiz.TabIndex = 0;
-            btnStartQuiz.Text = "Start quiz";
-            btnStartQuiz.TextAlign = ContentAlignment.MiddleRight;
+            btnStartQuiz.Text = "Start";
             btnStartQuiz.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnStartQuiz.UseVisualStyleBackColor = true;
             btnStartQuiz.Click += btnStartQuiz_Click;
+            // 
+            // quizQuestionView1
+            // 
+            quizQuestionView1.Dock = DockStyle.Fill;
+            quizQuestionView1.Location = new Point(0, 0);
+            quizQuestionView1.Name = "quizQuestionView1";
+            quizQuestionView1.Size = new Size(350, 326);
+            quizQuestionView1.TabIndex = 0;
             // 
             // tSessionTime
             // 
@@ -121,6 +131,7 @@
             Load += QuizSessionView_Load;
             scMainLayout.Panel1.ResumeLayout(false);
             scMainLayout.Panel1.PerformLayout();
+            scMainLayout.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)scMainLayout).EndInit();
             scMainLayout.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -135,5 +146,6 @@
         private Label lbSessionTime;
         private System.Windows.Forms.Timer tSessionTime;
         private PictureBox pictureBox1;
+        private QuizQuestionView quizQuestionView1;
     }
 }

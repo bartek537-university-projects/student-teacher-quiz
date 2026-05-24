@@ -102,8 +102,6 @@ public partial class AnswerList : UserControl
 
     private void UpdateColorMarking()
     {
-        SuspendLayout();
-
         foreach (CheckBox checkbox in Controls.OfType<CheckBox>())
         {
             if (checkbox.Tag is not Answer answer)
@@ -118,8 +116,6 @@ public partial class AnswerList : UserControl
             checkbox.BackColor = color;
             checkbox.UseVisualStyleBackColor = color == Color.Empty;
         }
-
-        ResumeLayout();
     }
 
     private Color GetAnswerColor(bool isChecked, bool isCorrect)
