@@ -13,7 +13,7 @@ public static class GetQuiz
         public async Task<Response> HandleAsync(Query request, CancellationToken cancellationToken)
         {
             DomainQuiz? quiz = await quizRepository
-                .GetSingleAsync(request.Path, request.Secret);
+                .GetSingleAsync(request.Path, request.Secret, cancellationToken);
 
             return new Response(quiz);
         }

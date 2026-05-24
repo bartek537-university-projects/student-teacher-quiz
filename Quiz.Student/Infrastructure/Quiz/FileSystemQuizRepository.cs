@@ -1,18 +1,12 @@
-﻿using QuizApp.Student.Application.Quiz.Abstractions;
-using System.Text.Json;
+﻿using QuizApp.Core.Model;
+using QuizApp.Student.Application.Quiz.Abstractions;
 using DomainQuiz = QuizApp.Core.Domain.Quiz;
 
 namespace QuizApp.Student.Infrastructure.Quiz;
 
-internal class FileSystemQuizRepository : IQuizRepository
+internal class FileSystemQuizRepository(IQuizAccessor quizAccessor) : IQuizRepository
 {
-    public Task<DomainQuiz?> GetSingleAsync(Uri path, string? secret)
-    {
-        DomainQuiz? quiz = ReadQuiz(path);
-        return Task.FromResult(quiz);
-    }
-
-    private static DomainQuiz? ReadQuiz(Uri uri)
+    public async Task<DomainQuiz?> GetSingleAsync(Uri uri, string? secret, CancellationToken _)
     {
         string path = uri.AbsolutePath;
 
@@ -23,8 +17,7 @@ internal class FileSystemQuizRepository : IQuizRepository
 
         try
         {
-            string json = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<DomainQuiz>(json);
+            return await quizAccessor.LoadFromFile(uri.AbsolutePath, secret ?? "");
         }
         catch
         {

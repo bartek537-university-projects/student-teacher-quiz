@@ -1,12 +1,10 @@
-using QuizApp.Core.Domain;
+using QuizApp.Core.Model;
 using QuizApp.Student.Application.Quiz;
 using QuizApp.Student.Application.Recents;
-using QuizApp.Student.Domain;
 using QuizApp.Student.Infrastructure.Quiz;
 using QuizApp.Student.Infrastructure.Recents;
 using QuizApp.Student.Presentation.Main;
 using QuizApp.Student.Presentation.QuizSelection;
-using QuizApp.Student.Presentation.QuizSession;
 
 namespace QuizApp.Student;
 
@@ -25,7 +23,8 @@ internal static class Program
             return;
         }
 
-        FileSystemQuizRepository quizRepository = new();
+        QuizAccessor quizAccessor = new();
+        FileSystemQuizRepository quizRepository = new(quizAccessor);
         FileSystemRecentFilesRepository recentFilesRepository = new(@".\recents.json");
 
         GetQuiz.Handler getQuizHandler = new(quizRepository);

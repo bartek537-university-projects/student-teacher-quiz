@@ -4,5 +4,5 @@ namespace QuizApp.Student.Application.Quiz.Abstractions;
 
 public interface IQuizRepository
 {
-    Task<DomainQuiz?> GetSingleAsync(Uri path, string? secret);
+    Task<DomainQuiz?> GetSingleAsync(Uri path, string? secret, CancellationToken cancellationToken);
 }
