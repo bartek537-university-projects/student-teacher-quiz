@@ -4,6 +4,8 @@ namespace QuizApp.Student.Presentation.QuizSession.Interfaces;
 
 internal interface IQuizQuestionView
 {
-    public event Action Ready;
-    public event Action<IReadOnlyList<Answer>> AnswerSelectionChange;
+    event Action Ready;
+    event Action<IReadOnlyList<Answer>> AnswerSelectionChange;
+    event Action NextQuestionClick;
+    event Action PreviousQuestionClick;
 }

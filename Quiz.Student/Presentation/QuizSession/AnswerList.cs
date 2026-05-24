@@ -20,7 +20,7 @@ public partial class AnswerList : UserControl
         set => SetSelectedAnswers(value);
     }
 
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public bool Marked
     {
         get;
@@ -98,6 +98,8 @@ public partial class AnswerList : UserControl
             }
             checkbox.Checked = selectedAnswers.Contains(answer);
         }
+
+        UpdateColorMarking();
     }
 
     private void UpdateColorMarking()

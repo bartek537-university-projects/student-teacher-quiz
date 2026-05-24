@@ -1,4 +1,5 @@
-﻿using QuizApp.Student.Presentation.QuizSession.Interfaces;
+﻿using QuizApp.Core.Domain;
+using QuizApp.Student.Presentation.QuizSession.Interfaces;
 using System.ComponentModel;
 
 namespace QuizApp.Student.Presentation.QuizSession;
@@ -30,37 +31,47 @@ internal partial class QuizSessionView : Form, IQuizSessionView
         tSessionTime.Tick += UpdateElapsedTime;
 
         // TODO: Move this to appropriate layers.
-        QuizQuestionView view = new()
-        {
-            Dock = DockStyle.Fill
-        };
+        //QuizQuestionView view = new()
+        //{
+        //    Dock = DockStyle.Fill
+        //};
 
-        QuizQuestionPresenter presenter = new(view);
-        view.Presenter = presenter;
-        presenter.Questions = [
-            new Core.Domain.Question() {
+        //QuizQuestionPresenter presenter = new(view);
+        //view.Presenter = presenter;
+        IReadOnlyList<Question> questions = [
+            new Question() {
                 Title = "Ile nóg ma hulajnoga?",
                 PlusPoints = 2,
                 MinusPoints = 0,
                 Answers = [
-                    new Core.Domain.Answer() { Title = "Jedną", IsCorrect = true },
-                    new Core.Domain.Answer() { Title = "Dwie", IsCorrect = false },
-                    new Core.Domain.Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
-                    new Core.Domain.Answer() { Title = "Sto", IsCorrect = false },
+                    new Answer() { Title = "Jedną", IsCorrect = true },
+                    new Answer() { Title = "Dwie", IsCorrect = false },
+                    new Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
+                    new Answer() { Title = "Sto", IsCorrect = false },
                 ]
             },
-            new Core.Domain.Question() {
+            new Question() {
                 Title = "Ile rąk ma stonoga?",
                 PlusPoints = 2,
                 MinusPoints = 4,
                 Answers = [
-                    new Core.Domain.Answer() { Title = "Jedną", IsCorrect = false },
-                    new Core.Domain.Answer() { Title = "Dwie", IsCorrect = false },
-                    new Core.Domain.Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
-                    new Core.Domain.Answer() { Title = "Sto", IsCorrect = false },
+                    new Answer() { Title = "Jedną", IsCorrect = false },
+                    new Answer() { Title = "Dwie", IsCorrect = false },
+                    new Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
+                    new Answer() { Title = "Sto", IsCorrect = false },
                 ]
             }
         ];
+
+        QuizReviewView view = new()
+        {
+            Dock = DockStyle.Fill
+        };
+        QuizReviewPresenter presenter = new(view, questions, userAnswers: new Dictionary<Guid, IReadOnlyList<Answer>>()
+        {
+            [questions[0].Guid] = [questions[0].Answers[0], questions[0].Answers[1]]
+        });
+        view.Presenter = presenter;
 
         scMainLayout.Panel2.Controls.Clear();
         scMainLayout.Panel2.Controls.Add(view);

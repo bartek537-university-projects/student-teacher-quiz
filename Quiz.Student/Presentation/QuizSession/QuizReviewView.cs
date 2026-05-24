@@ -1,13 +1,12 @@
-﻿using QuizApp.Core.Domain;
-using QuizApp.Student.Presentation.QuizSession.Interfaces;
+﻿using QuizApp.Student.Presentation.QuizSession.Interfaces;
 using System.ComponentModel;
 
 namespace QuizApp.Student.Presentation.QuizSession;
 
-internal partial class QuizQuestionView : UserControl, IQuizQuestionView
+internal partial class QuizReviewView : UserControl, IQuizReviewView
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public IQuizQuestionPresenter Presenter
+    public IQuizReviewPresenter Presenter
     {
         private get;
         set
@@ -18,28 +17,21 @@ internal partial class QuizQuestionView : UserControl, IQuizQuestionView
     } = null!;
 
     public event Action? Ready;
-    public event Action<IReadOnlyList<Answer>>? AnswerSelectionChange;
     public event Action? NextQuestionClick;
     public event Action? PreviousQuestionClick;
 
-    public QuizQuestionView()
+    public QuizReviewView()
     {
         InitializeComponent();
 
-        alAnswers.SelectedAnswersChanged += OnSelectedAnswersChanged;
+        alAnswers.Marked = true;
         pcControls.NextClick += OnNextQuestionClicked;
         pcControls.PreviousClick += OnPreviousQuestionClicked;
     }
 
-    private void QuizQuestionView_Load(object sender, EventArgs e)
+    private void QuizReviewView_Load(object sender, EventArgs e)
     {
         Ready?.Invoke();
-    }
-
-    private void OnSelectedAnswersChanged()
-    {
-        IReadOnlyList<Answer> answers = alAnswers.SelectedAnswers;
-        AnswerSelectionChange?.Invoke(answers);
     }
 
     private void OnNextQuestionClicked()
@@ -73,29 +65,16 @@ internal partial class QuizQuestionView : UserControl, IQuizQuestionView
     {
         if (Presenter.CurrentQuestionValue is not { } question)
         {
-            lbPoints.Text = GetPointsText(0, 0);
+            //lbPoints.Text = GetPointsText(0, 0);
             lbTitle.Text = "";
             alAnswers.Answers = [];
             alAnswers.SelectedAnswers = [];
             return;
         }
 
-        lbPoints.Text = GetPointsText(question.PlusPoints, question.MinusPoints);
+        //lbPoints.Text = GetPointsText(question.PlusPoints, question.MinusPoints);
         lbTitle.Text = question.Title;
         alAnswers.Answers = question.Answers;
         alAnswers.SelectedAnswers = Presenter.CurrentQuestionSelectedAnswers;
-    }
-
-    private static string GetPointsText(int plus, int minus)
-    {
-        string score = (plus, minus) switch
-        {
-            ( > 0, > 0) => $"{plus}/-{minus}",
-            ( > 0, _) => $"{plus}",
-            (_, > 0) => $"-{minus}",
-            _ => "0"
-        };
-
-        return $"({score} pts)";
     }
 }

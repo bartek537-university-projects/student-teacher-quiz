@@ -11,7 +11,7 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
     private readonly Quiz _quiz;
 
     private DateTime? _timeStarted;
-    private readonly DateTime? _timeFinished;
+    private DateTime? _timeFinished;
 
     public QuizSessionState State
     {
@@ -79,6 +79,7 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
             return;
         }
 
+        _timeFinished = GetCurrentDateTime();
         State = QuizSessionState.Finished;
     }
 

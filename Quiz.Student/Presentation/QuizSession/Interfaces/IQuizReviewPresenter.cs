@@ -2,7 +2,7 @@
 
 namespace QuizApp.Student.Presentation.QuizSession.Interfaces;
 
-internal interface IQuizQuestionPresenter
+internal interface IQuizReviewPresenter
 {
     IReadOnlyList<Question> Questions { get; }
     int CurrentQuestionIndex { get; set; }

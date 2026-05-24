@@ -3,10 +3,10 @@ using QuizApp.Student.Presentation.QuizSession.Interfaces;
 
 namespace QuizApp.Student.Presentation.QuizSession;
 
-internal class QuizQuestionPresenter : IQuizQuestionPresenter
+internal class QuizReviewPresenter : IQuizReviewPresenter
 {
-    private readonly IQuizQuestionView _view;
-    private readonly Dictionary<Guid, IReadOnlyList<Answer>> _userAnswers = [];
+    private readonly IQuizReviewView _view;
+    private readonly Dictionary<Guid, IReadOnlyList<Answer>> _userAnswers;
 
     public IReadOnlyList<Question> Questions { get; }
 
@@ -37,14 +37,15 @@ internal class QuizQuestionPresenter : IQuizQuestionPresenter
 
     public event Action? CurrentQuestionChange;
 
-    public QuizQuestionPresenter(IQuizQuestionView view, IReadOnlyList<Question> questions)
+    public QuizReviewPresenter(IQuizReviewView view,
+        IReadOnlyList<Question> questions, Dictionary<Guid, IReadOnlyList<Answer>> userAnswers)
     {
         _view = view;
 
         Questions = questions;
+        _userAnswers = userAnswers;
 
         _view.Ready += OnViewReady;
-        _view.AnswerSelectionChange += OnAnswerSelectionChanged;
         _view.NextQuestionClick += OnNextQuestionClicked;
         _view.PreviousQuestionClick += OnPreviousQuestionClicked;
     }
@@ -52,15 +53,6 @@ internal class QuizQuestionPresenter : IQuizQuestionPresenter
     private void OnViewReady()
     {
         CurrentQuestionChange?.Invoke();
-    }
-
-    private void OnAnswerSelectionChanged(IReadOnlyList<Answer> answers)
-    {
-        if (CurrentQuestionValue is not { } question)
-        {
-            return;
-        }
-        _userAnswers[question.Guid] = answers;
     }
 
     private void OnNextQuestionClicked()
