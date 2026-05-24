@@ -9,6 +9,7 @@ internal interface IQuizSessionPresenter
 
     Quiz Quiz { get; }
     Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; }
+    Dictionary<Guid, int> QuestionScores { get; }
 
     TimeSpan ElapsedTime { get; }
 

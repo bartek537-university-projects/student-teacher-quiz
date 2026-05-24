@@ -33,7 +33,7 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 
     public Quiz Quiz { get; }
     public Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; private set; } = [];
-    public Dictionary<Guid, int> Scores { get; private set; } = [];
+    public Dictionary<Guid, int> QuestionScores { get; private set; } = [];
 
     public event Action? StateChange;
 
@@ -89,7 +89,7 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 
         _timeFinished = GetCurrentDateTime();
 
-        Scores = _scoreCalculator.Score(Quiz.Questions, UserAnswers);
+        QuestionScores = _scoreCalculator.Score(Quiz.Questions, UserAnswers);
         State = QuizSessionState.Finished;
     }
 

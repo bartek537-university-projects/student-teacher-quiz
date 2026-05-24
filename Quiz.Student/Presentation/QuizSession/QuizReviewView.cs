@@ -65,16 +65,21 @@ internal partial class QuizReviewView : UserControl, IQuizReviewView
     {
         if (Presenter.CurrentQuestionValue is not { } question)
         {
-            //lbPoints.Text = GetPointsText(0, 0);
+            lbPoints.Text = GetPointsText(0);
             lbTitle.Text = "";
             alAnswers.Answers = [];
             alAnswers.SelectedAnswers = [];
             return;
         }
 
-        //lbPoints.Text = GetPointsText(question.PlusPoints, question.MinusPoints);
+        lbPoints.Text = GetPointsText(Presenter.CurrentQuestionScore);
         lbTitle.Text = question.Title;
         alAnswers.Answers = question.Answers;
         alAnswers.SelectedAnswers = Presenter.CurrentQuestionSelectedAnswers;
+    }
+
+    private string GetPointsText(int points)
+    {
+        return $"{points} pts";
     }
 }

@@ -116,10 +116,10 @@ internal partial class QuizSessionView : Form, IQuizSessionView
     private void DisplayQuizReviewScreen()
     {
         ImmutableArray<Question> questions = Presenter.Quiz.Questions;
-        Dictionary<Guid, IReadOnlyList<Answer>> userAnswers = Presenter.UserAnswers;
 
         QuizReviewView view = new();
-        QuizReviewPresenter presenter = new(view, questions, userAnswers);
+        QuizReviewPresenter presenter = new(view, questions,
+            Presenter.UserAnswers, Presenter.QuestionScores);
         view.Presenter = presenter;
 
         ReplaceMainComponent(view);

@@ -9,6 +9,7 @@ internal interface IQuizReviewPresenter
 
     Question? CurrentQuestionValue { get; }
     IReadOnlyList<Answer> CurrentQuestionSelectedAnswers { get; }
+    int CurrentQuestionScore { get; }
 
     event Action CurrentQuestionChange;
 }

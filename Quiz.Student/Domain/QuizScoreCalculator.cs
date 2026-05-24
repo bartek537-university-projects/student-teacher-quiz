@@ -13,9 +13,12 @@ internal class QuizScoreCalculator(IQuestionScoreStrategy questionScoreStrategy)
 
         foreach (Question question in questions)
         {
-            IReadOnlyList<Answer> userAnswer = userAnswers[question.Guid];
-            int questionScore = questionScoreStrategy.Score(question, userAnswer);
+            if (!userAnswers.TryGetValue(question.Guid, out IReadOnlyList<Answer>? userAnswer))
+            {
+                continue;
+            }
 
+            int questionScore = questionScoreStrategy.Score(question, userAnswer);
             score[question.Guid] = questionScore;
         }
 
