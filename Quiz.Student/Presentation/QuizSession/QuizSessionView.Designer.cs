@@ -57,6 +57,7 @@
             // 
             // scMainLayout.Panel1
             // 
+            scMainLayout.Panel1.BackColor = SystemColors.Control;
             scMainLayout.Panel1.Controls.Add(lbScoreAccuracy);
             scMainLayout.Panel1.Controls.Add(pictureBox3);
             scMainLayout.Panel1.Controls.Add(lbScorePoints);
@@ -156,6 +157,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Window;
             ClientSize = new Size(554, 326);
             Controls.Add(scMainLayout);
             Name = "QuizSessionView";

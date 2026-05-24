@@ -39,7 +39,7 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
     private void UpdateElapsedTime()
     {
-        var time = Presenter.ElapsedTime.ToString(@"mm\:ss");
+        string time = Presenter.ElapsedTime.ToString(@"mm\:ss");
         lbSessionTime.Text = $"Time: {time}";
     }
 
@@ -143,14 +143,15 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
     private void UpdateScore()
     {
-        var scores = Presenter.QuestionScores;
+        Dictionary<Guid, int> scores = Presenter.QuestionScores;
 
-        var collectedPoints = scores.Sum(s => s.Value);
-        var possiblePoints = Presenter.Quiz.Questions.Sum(q => q.PlusPoints);
+        int collectedPoints = scores.Sum(s => s.Value);
+        int possiblePoints = Presenter.Quiz.Questions.Sum(q => q.PlusPoints);
 
-        var accuracy = scores.Count(s => s.Value > 0) / (double)scores.Count;
+        double correctness = (double)collectedPoints / possiblePoints;
+        double accuracy = scores.Count(s => s.Value > 0) / scores.Count;
 
-        lbScorePoints.Text = $"Score: {collectedPoints} / {possiblePoints}";
+        lbScorePoints.Text = $"Score: {collectedPoints}/{possiblePoints} ({correctness:P0})";
         lbScoreAccuracy.Text = $"Accuracy: {accuracy:P0}";
     }
 

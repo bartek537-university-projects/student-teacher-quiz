@@ -1,6 +1,9 @@
+using QuizApp.Core.Domain;
+using QuizApp.Student.Domain;
 using QuizApp.Student.Domain.Entities;
 using QuizApp.Student.Presentation.QuizSelection;
 using QuizApp.Student.Presentation.QuizSelection.Interfaces;
+using QuizApp.Student.Presentation.QuizSession;
 using System.ComponentModel;
 
 namespace QuizApp.Student.Presentation.Main;
@@ -141,5 +144,17 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
     {
         passwordInputView.Hide();
         passwordInputView.Path = null;
+    }
+
+    public void StartQuizSession(Quiz quiz)
+    {
+        AllOrNothingQuestionScoreStrategy questionScoreStrategy = new();
+        QuizScoreCalculator quizScoreCalculator = new(questionScoreStrategy);
+
+        using QuizSessionView view = new();
+        QuizSessionPresenter presenter = new(view, TimeProvider.System, quizScoreCalculator, quiz);
+        view.Presenter = presenter;
+
+        _ = view.ShowDialog();
     }
 }

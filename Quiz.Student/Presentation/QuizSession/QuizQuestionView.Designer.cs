@@ -87,6 +87,7 @@
             alAnswers.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             alAnswers.Dock = DockStyle.Fill;
             alAnswers.Location = new Point(3, 36);
+            alAnswers.Marked = false;
             alAnswers.Name = "alAnswers";
             alAnswers.Padding = new Padding(0, 16, 0, 0);
             alAnswers.Size = new Size(433, 212);
@@ -96,7 +97,6 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Control;
             Controls.Add(alAnswers);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(pcControls);

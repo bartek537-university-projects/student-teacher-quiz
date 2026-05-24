@@ -64,6 +64,7 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
         _view.HidePasswordPrompt();
         await AddRecentFileAsync(path, cancellationToken);
         await UpdateRecentFilesAsync(cancellationToken);
+        _view.StartQuizSession(quiz);
     }
 
     private async Task<DomainQuiz?> GetQuizAsync(Uri path, string secret, CancellationToken cancellationToken)

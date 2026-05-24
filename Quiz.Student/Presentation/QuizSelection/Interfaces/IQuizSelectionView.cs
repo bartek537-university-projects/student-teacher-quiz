@@ -1,4 +1,6 @@
-﻿namespace QuizApp.Student.Presentation.QuizSelection.Interfaces;
+﻿using QuizApp.Core.Domain;
+
+namespace QuizApp.Student.Presentation.QuizSelection.Interfaces;
 
 internal interface IQuizSelectionView
 {
@@ -7,4 +9,5 @@ internal interface IQuizSelectionView
 
     void ShowPasswordPrompt(Uri path);
     void HidePasswordPrompt();
+    void StartQuizSession(Quiz quiz);
 }
