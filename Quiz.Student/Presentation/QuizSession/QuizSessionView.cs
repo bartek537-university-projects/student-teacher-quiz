@@ -145,7 +145,7 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
     private void btnFinishQuiz_Click(object sender, EventArgs e)
     {
-        var confirmation = MessageBox.Show(
+        DialogResult confirmation = MessageBox.Show(
             "Do you want to finish this attempt? Once you do, you won't be able to change your answers.",
             "Finish quiz", MessageBoxButtons.OKCancel);
 

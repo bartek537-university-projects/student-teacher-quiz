@@ -4,7 +4,7 @@ namespace QuizApp.Student.Presentation.QuizSession.Interfaces;
 
 internal interface IQuizSessionView
 {
-    public Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; }
+    Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; }
 
     event Action Ready;
     event Action StartClick;

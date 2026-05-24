@@ -1,4 +1,5 @@
 ﻿using QuizApp.Core.Domain;
+using QuizApp.Student.Domain.Interfaces;
 using QuizApp.Student.Presentation.QuizSession.Interfaces;
 using QuizApp.Student.Presentation.QuizSession.Values;
 
@@ -8,6 +9,7 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 {
     private readonly IQuizSessionView _view;
     private readonly TimeProvider _timeProvider;
+    private readonly IQuizScoreCalculator _scoreCalculator;
 
     private DateTime? _timeStarted;
     private DateTime? _timeFinished;
@@ -31,15 +33,19 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 
     public Quiz Quiz { get; }
     public Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; private set; } = [];
+    public Dictionary<Guid, int> Scores { get; private set; } = [];
 
     public event Action? StateChange;
 
     public QuizSessionPresenter(IQuizSessionView view,
         TimeProvider timeProvider,
+        IQuizScoreCalculator scoreCalculator,
         Quiz quiz)
     {
         _view = view;
         _timeProvider = timeProvider;
+        _scoreCalculator = scoreCalculator;
+
         Quiz = quiz;
 
         _view.Ready += OnViewReady;
@@ -82,6 +88,8 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
         }
 
         _timeFinished = GetCurrentDateTime();
+
+        Scores = _scoreCalculator.Score(Quiz.Questions, UserAnswers);
         State = QuizSessionState.Finished;
     }
 

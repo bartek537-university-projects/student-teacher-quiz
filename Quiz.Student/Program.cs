@@ -1,4 +1,5 @@
 using QuizApp.Core.Domain;
+using QuizApp.Student.Domain;
 using QuizApp.Student.Presentation.QuizSession;
 
 namespace QuizApp.Student;
@@ -60,8 +61,11 @@ internal static class Program
             ]
         };
 
+        AllOrNothingQuestionScoreStrategy questionScoreStrategy = new();
+        QuizScoreCalculator quizScoreCalculator = new(questionScoreStrategy);
+
         QuizSessionView view = new();
-        QuizSessionPresenter presenter = new(view, TimeProvider.System, quiz);
+        QuizSessionPresenter presenter = new(view, TimeProvider.System, quizScoreCalculator, quiz);
         view.Presenter = presenter;
 
         System.Windows.Forms.Application.Run(view);
