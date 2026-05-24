@@ -34,7 +34,7 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
     private void UpdateElapsedTime(object? sender, EventArgs e)
     {
-        lbSessionTime.Text = Presenter.ElapsedTime.ToString(@"mm\:ss\.fff");
+        lbSessionTime.Text = Presenter.ElapsedTime.ToString(@"mm\:ss");
     }
 
     private void SetupPresenter()
@@ -145,6 +145,15 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
     private void btnFinishQuiz_Click(object sender, EventArgs e)
     {
+        var confirmation = MessageBox.Show(
+            "Do you want to finish this attempt? Once you do, you won't be able to change your answers.",
+            "Finish quiz", MessageBoxButtons.OKCancel);
+
+        if (confirmation != DialogResult.OK)
+        {
+            return;
+        }
+
         StopClick?.Invoke();
     }
 }

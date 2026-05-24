@@ -74,9 +74,9 @@
             lbSessionTime.AutoSize = true;
             lbSessionTime.Location = new Point(34, 14);
             lbSessionTime.Name = "lbSessionTime";
-            lbSessionTime.Size = new Size(55, 15);
+            lbSessionTime.Size = new Size(34, 15);
             lbSessionTime.TabIndex = 2;
-            lbSessionTime.Text = "00:00.000";
+            lbSessionTime.Text = "00:00";
             // 
             // btnFinishQuiz
             // 
@@ -104,7 +104,7 @@
             // 
             // tSessionTime
             // 
-            tSessionTime.Interval = 50;
+            tSessionTime.Interval = 1000;
             // 
             // QuizSessionView
             // 
