@@ -35,11 +35,9 @@
             lbSessionTime = new Label();
             btnFinishQuiz = new Button();
             btnStartQuiz = new Button();
-            quizQuestionView1 = new QuizQuestionView();
             tSessionTime = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)scMainLayout).BeginInit();
             scMainLayout.Panel1.SuspendLayout();
-            scMainLayout.Panel2.SuspendLayout();
             scMainLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -57,10 +55,6 @@
             scMainLayout.Panel1.Controls.Add(lbSessionTime);
             scMainLayout.Panel1.Controls.Add(btnFinishQuiz);
             scMainLayout.Panel1.Controls.Add(btnStartQuiz);
-            // 
-            // scMainLayout.Panel2
-            // 
-            scMainLayout.Panel2.Controls.Add(quizQuestionView1);
             scMainLayout.Size = new Size(554, 326);
             scMainLayout.SplitterDistance = 200;
             scMainLayout.TabIndex = 0;
@@ -108,14 +102,6 @@
             btnStartQuiz.UseVisualStyleBackColor = true;
             btnStartQuiz.Click += btnStartQuiz_Click;
             // 
-            // quizQuestionView1
-            // 
-            quizQuestionView1.Dock = DockStyle.Fill;
-            quizQuestionView1.Location = new Point(0, 0);
-            quizQuestionView1.Name = "quizQuestionView1";
-            quizQuestionView1.Size = new Size(350, 326);
-            quizQuestionView1.TabIndex = 0;
-            // 
             // tSessionTime
             // 
             tSessionTime.Interval = 50;
@@ -131,7 +117,6 @@
             Load += QuizSessionView_Load;
             scMainLayout.Panel1.ResumeLayout(false);
             scMainLayout.Panel1.PerformLayout();
-            scMainLayout.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)scMainLayout).EndInit();
             scMainLayout.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -146,6 +131,5 @@
         private Label lbSessionTime;
         private System.Windows.Forms.Timer tSessionTime;
         private PictureBox pictureBox1;
-        private QuizQuestionView quizQuestionView1;
     }
 }

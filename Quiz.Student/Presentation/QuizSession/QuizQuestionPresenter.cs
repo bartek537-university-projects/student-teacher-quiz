@@ -6,7 +6,7 @@ namespace QuizApp.Student.Presentation.QuizSession;
 internal class QuizQuestionPresenter : IQuizQuestionPresenter
 {
     private readonly IQuizQuestionView _view;
-    private readonly Dictionary<Guid, IReadOnlyList<Answer>> _userAnswers = [];
+    public Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; private set; } = [];
 
     public IReadOnlyList<Question> Questions { get; }
 
@@ -31,11 +31,12 @@ internal class QuizQuestionPresenter : IQuizQuestionPresenter
             {
                 return [];
             }
-            return _userAnswers.GetValueOrDefault(question.Guid, []);
+            return UserAnswers.GetValueOrDefault(question.Guid, []);
         }
     }
 
     public event Action? CurrentQuestionChange;
+    public event Action? UserAnswersChanged;
 
     public QuizQuestionPresenter(IQuizQuestionView view, IReadOnlyList<Question> questions)
     {
@@ -60,7 +61,8 @@ internal class QuizQuestionPresenter : IQuizQuestionPresenter
         {
             return;
         }
-        _userAnswers[question.Guid] = answers;
+        UserAnswers[question.Guid] = answers;
+        UserAnswersChanged?.Invoke();
     }
 
     private void OnNextQuestionClicked()

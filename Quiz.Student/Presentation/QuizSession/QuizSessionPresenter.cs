@@ -8,7 +8,6 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 {
     private readonly IQuizSessionView _view;
     private readonly TimeProvider _timeProvider;
-    private readonly Quiz _quiz;
 
     private DateTime? _timeStarted;
     private DateTime? _timeFinished;
@@ -30,6 +29,9 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 
     public TimeSpan ElapsedTime => GetElapsedTime();
 
+    public Quiz Quiz { get; }
+    public Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; private set; } = [];
+
     public event Action? StateChange;
 
     public QuizSessionPresenter(IQuizSessionView view,
@@ -38,16 +40,16 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
     {
         _view = view;
         _timeProvider = timeProvider;
-        _quiz = quiz;
+        Quiz = quiz;
 
         _view.Ready += OnViewReady;
         _view.StartClick += OnStartClicked;
         _view.StopClick += OnStopClicked;
+        _view.UserAnswersChange += OnUserAnswersChanged;
     }
 
     private void OnViewReady()
     {
-        _view.Title = _quiz.Title;
         StateChange?.Invoke();
     }
 
@@ -81,6 +83,11 @@ internal class QuizSessionPresenter : IQuizSessionPresenter
 
         _timeFinished = GetCurrentDateTime();
         State = QuizSessionState.Finished;
+    }
+
+    private void OnUserAnswersChanged()
+    {
+        UserAnswers = _view.UserAnswers;
     }
 
     private TimeSpan GetElapsedTime()

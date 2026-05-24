@@ -1,5 +1,6 @@
 ﻿using QuizApp.Core.Domain;
 using QuizApp.Student.Presentation.QuizSession.Interfaces;
+using System.Collections.Immutable;
 using System.ComponentModel;
 
 namespace QuizApp.Student.Presentation.QuizSession;
@@ -17,64 +18,18 @@ internal partial class QuizSessionView : Form, IQuizSessionView
         }
     } = null!;
 
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public string Title { set => Text = value; }
+    public Dictionary<Guid, IReadOnlyList<Answer>> UserAnswers { get; private set; } = [];
 
     public event Action? Ready;
     public event Action? StartClick;
     public event Action? StopClick;
+    public event Action? UserAnswersChange;
 
     public QuizSessionView()
     {
         InitializeComponent();
 
         tSessionTime.Tick += UpdateElapsedTime;
-
-        // TODO: Move this to appropriate layers.
-        //QuizQuestionView view = new()
-        //{
-        //    Dock = DockStyle.Fill
-        //};
-
-        //QuizQuestionPresenter presenter = new(view);
-        //view.Presenter = presenter;
-        IReadOnlyList<Question> questions = [
-            new Question() {
-                Title = "Ile nóg ma hulajnoga?",
-                PlusPoints = 2,
-                MinusPoints = 0,
-                Answers = [
-                    new Answer() { Title = "Jedną", IsCorrect = true },
-                    new Answer() { Title = "Dwie", IsCorrect = false },
-                    new Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
-                    new Answer() { Title = "Sto", IsCorrect = false },
-                ]
-            },
-            new Question() {
-                Title = "Ile rąk ma stonoga?",
-                PlusPoints = 2,
-                MinusPoints = 4,
-                Answers = [
-                    new Answer() { Title = "Jedną", IsCorrect = false },
-                    new Answer() { Title = "Dwie", IsCorrect = false },
-                    new Answer() { Title = "Czterdzieści dwie", IsCorrect = true },
-                    new Answer() { Title = "Sto", IsCorrect = false },
-                ]
-            }
-        ];
-
-        QuizReviewView view = new()
-        {
-            Dock = DockStyle.Fill
-        };
-        QuizReviewPresenter presenter = new(view, questions, userAnswers: new Dictionary<Guid, IReadOnlyList<Answer>>()
-        {
-            [questions[0].Guid] = [questions[0].Answers[0], questions[0].Answers[1]]
-        });
-        view.Presenter = presenter;
-
-        scMainLayout.Panel2.Controls.Clear();
-        scMainLayout.Panel2.Controls.Add(view);
     }
 
     private void UpdateElapsedTime(object? sender, EventArgs e)
@@ -107,6 +62,8 @@ internal partial class QuizSessionView : Form, IQuizSessionView
     {
         btnStartQuiz.Enabled = true;
         btnFinishQuiz.Enabled = false;
+        Text = Presenter.Quiz.Title;
+        DisplayQuizTitleScreen();
     }
 
     private void StartQuiz()
@@ -114,6 +71,7 @@ internal partial class QuizSessionView : Form, IQuizSessionView
         tSessionTime.Start();
         btnStartQuiz.Enabled = false;
         btnFinishQuiz.Enabled = true;
+        DisplayQuizQuestionScreen();
     }
 
     private void FinishQuiz()
@@ -121,6 +79,58 @@ internal partial class QuizSessionView : Form, IQuizSessionView
         tSessionTime.Stop();
         btnStartQuiz.Enabled = false;
         btnFinishQuiz.Enabled = false;
+        DisplayQuizReviewScreen();
+    }
+
+    private void DisplayQuizTitleScreen()
+    {
+        Quiz quiz = Presenter.Quiz;
+
+        QuizTitleView view = new()
+        {
+            Parent = this,
+            QuizId = quiz.Guid.ToString(),
+            Title = quiz.Title,
+        };
+
+        ReplaceMainComponent(view);
+    }
+
+    private void DisplayQuizQuestionScreen()
+    {
+        ImmutableArray<Question> questions = Presenter.Quiz.Questions;
+
+        QuizQuestionView view = new();
+        QuizQuestionPresenter presenter = new(view, questions);
+        view.Presenter = presenter;
+
+        presenter.UserAnswersChanged += () =>
+        {
+            UserAnswers = presenter.UserAnswers;
+            UserAnswersChange?.Invoke();
+        };
+
+        ReplaceMainComponent(view);
+    }
+
+    private void DisplayQuizReviewScreen()
+    {
+        ImmutableArray<Question> questions = Presenter.Quiz.Questions;
+        Dictionary<Guid, IReadOnlyList<Answer>> userAnswers = Presenter.UserAnswers;
+
+        QuizReviewView view = new();
+        QuizReviewPresenter presenter = new(view, questions, userAnswers);
+        view.Presenter = presenter;
+
+        ReplaceMainComponent(view);
+    }
+
+    private void ReplaceMainComponent(Control control)
+    {
+        control.Dock = DockStyle.Fill;
+
+        scMainLayout.Panel2.Controls.Clear();
+        scMainLayout.Panel2.Controls.Add(control);
     }
 
     private void QuizSessionView_Load(object sender, EventArgs e)
