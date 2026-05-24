@@ -19,6 +19,12 @@ public partial class PasswordInputView : Form
         InitializeComponent();
     }
 
+    public void Clear()
+    {
+        tbPassword.Clear();
+        lbError.Visible = false;
+    }
+
     private void btnUnlock_Click(object sender, EventArgs e)
     {
         SubmitClick?.Invoke();

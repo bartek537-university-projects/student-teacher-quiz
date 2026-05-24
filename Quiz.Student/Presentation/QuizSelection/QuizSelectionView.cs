@@ -123,6 +123,11 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
     {
         bool isRepeated = passwordInputView.Visible && passwordInputView.Path == path;
 
+        if (!isRepeated)
+        {
+            passwordInputView.Password = string.Empty;
+        }
+
         passwordInputView.Path = path;
         passwordInputView.IsInvalid = isRepeated;
 
@@ -154,6 +159,9 @@ internal partial class QuizSelectionView : Form, IQuizSelectionView
         using QuizSessionView view = new();
         QuizSessionPresenter presenter = new(view, TimeProvider.System, quizScoreCalculator, quiz);
         view.Presenter = presenter;
+
+        view.Owner = this;
+        view.StartPosition = FormStartPosition.CenterParent;
 
         _ = view.ShowDialog();
     }
