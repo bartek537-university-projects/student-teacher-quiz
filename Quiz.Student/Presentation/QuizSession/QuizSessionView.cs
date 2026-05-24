@@ -29,12 +29,18 @@ internal partial class QuizSessionView : Form, IQuizSessionView
     {
         InitializeComponent();
 
-        tSessionTime.Tick += UpdateElapsedTime;
+        tSessionTime.Tick += OnSessionTimeTick;
     }
 
-    private void UpdateElapsedTime(object? sender, EventArgs e)
+    private void OnSessionTimeTick(object? sender, EventArgs e)
     {
-        lbSessionTime.Text = Presenter.ElapsedTime.ToString(@"mm\:ss");
+        UpdateElapsedTime();
+    }
+
+    private void UpdateElapsedTime()
+    {
+        var time = Presenter.ElapsedTime.ToString(@"mm\:ss");
+        lbSessionTime.Text = $"Time: {time}";
     }
 
     private void SetupPresenter()
@@ -60,6 +66,7 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
     private void InitializeQuiz()
     {
+        UpdateElapsedTime();
         btnStartQuiz.Enabled = true;
         btnFinishQuiz.Enabled = false;
         Text = Presenter.Quiz.Title;
@@ -80,6 +87,7 @@ internal partial class QuizSessionView : Form, IQuizSessionView
         btnStartQuiz.Enabled = false;
         btnFinishQuiz.Enabled = false;
         DisplayQuizReviewScreen();
+        UpdateScore();
     }
 
     private void DisplayQuizTitleScreen()
@@ -131,6 +139,19 @@ internal partial class QuizSessionView : Form, IQuizSessionView
 
         scMainLayout.Panel2.Controls.Clear();
         scMainLayout.Panel2.Controls.Add(control);
+    }
+
+    private void UpdateScore()
+    {
+        var scores = Presenter.QuestionScores;
+
+        var collectedPoints = scores.Sum(s => s.Value);
+        var possiblePoints = Presenter.Quiz.Questions.Sum(q => q.PlusPoints);
+
+        var accuracy = scores.Count(s => s.Value > 0) / (double)scores.Count;
+
+        lbScorePoints.Text = $"Score: {collectedPoints} / {possiblePoints}";
+        lbScoreAccuracy.Text = $"Accuracy: {accuracy:P0}";
     }
 
     private void QuizSessionView_Load(object sender, EventArgs e)
