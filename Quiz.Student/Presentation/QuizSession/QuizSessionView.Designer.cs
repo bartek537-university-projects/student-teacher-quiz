@@ -38,7 +38,6 @@
             // 
             // scMainLayout
             // 
-            scMainLayout.BackColor = SystemColors.Window;
             scMainLayout.Dock = DockStyle.Fill;
             scMainLayout.FixedPanel = FixedPanel.Panel1;
             scMainLayout.Location = new Point(0, 0);
@@ -56,7 +55,7 @@
             // 
             btnFinishQuiz.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnFinishQuiz.Image = Properties.Resources.Stop;
-            btnFinishQuiz.Location = new Point(3, 282);
+            btnFinishQuiz.Location = new Point(3, 291);
             btnFinishQuiz.Name = "btnFinishQuiz";
             btnFinishQuiz.Size = new Size(194, 32);
             btnFinishQuiz.TabIndex = 1;
@@ -64,12 +63,13 @@
             btnFinishQuiz.TextAlign = ContentAlignment.MiddleRight;
             btnFinishQuiz.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnFinishQuiz.UseVisualStyleBackColor = true;
+            btnFinishQuiz.Click += btnFinishQuiz_Click;
             // 
             // btnStartQuiz
             // 
             btnStartQuiz.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnStartQuiz.Image = Properties.Resources.Run;
-            btnStartQuiz.Location = new Point(3, 244);
+            btnStartQuiz.Location = new Point(3, 257);
             btnStartQuiz.Name = "btnStartQuiz";
             btnStartQuiz.Size = new Size(194, 32);
             btnStartQuiz.TabIndex = 0;
@@ -77,16 +77,17 @@
             btnStartQuiz.TextAlign = ContentAlignment.MiddleRight;
             btnStartQuiz.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnStartQuiz.UseVisualStyleBackColor = true;
+            btnStartQuiz.Click += btnStartQuiz_Click;
             // 
             // QuizSessionView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Window;
             ClientSize = new Size(554, 326);
             Controls.Add(scMainLayout);
             Name = "QuizSessionView";
             Text = "QuizSessionView";
+            Load += QuizSessionView_Load;
             scMainLayout.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)scMainLayout).EndInit();
             scMainLayout.ResumeLayout(false);
