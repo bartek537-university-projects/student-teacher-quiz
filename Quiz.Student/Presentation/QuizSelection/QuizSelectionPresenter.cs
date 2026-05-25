@@ -42,8 +42,18 @@ internal class QuizSelectionPresenter : IQuizSelectionPresenter
         _addRecentFile = addRecentFiles;
         _getRecentFiles = getRecentFiles;
 
-        _view.Ready += () => OnViewReadyAsync(CancellationToken.None).Wait();
-        _view.FileSelect += (path, secret) => OnLocalFileSelectedAsync(path, secret ?? string.Empty, CancellationToken.None).Wait();
+        _view.Ready += async () =>
+        {
+            await OnViewReadyAsync(CancellationToken.None);
+        };
+
+        _view.FileSelect += async (path, secret) =>
+        {
+            await OnLocalFileSelectedAsync(
+                path,
+                secret ?? string.Empty,
+                CancellationToken.None);
+        };
     }
 
     private async Task OnViewReadyAsync(CancellationToken cancellationToken)
