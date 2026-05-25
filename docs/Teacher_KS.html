@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dokumentacja – Quiz.Core & Quiz.Teacher</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --border: #1f2937;
+      --code: #0b1220;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      padding: 32px 24px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
+    }
+    header h1 { margin: 0 0 8px; font-size: 28px; }
+    header p { margin: 0; color: var(--muted); }
+    main { padding: 24px; max-width: 1100px; margin: 0 auto; }
+    section { margin-bottom: 24px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    h2 { margin-top: 0; font-size: 22px; }
+    h3 { font-size: 18px; margin-bottom: 8px; }
+    code, pre { background: var(--code); color: #e2e8f0; }
+    code { padding: 2px 6px; border-radius: 6px; }
+    pre { padding: 12px; border-radius: 8px; overflow-x: auto; }
+    ul { margin: 8px 0 0 18px; }
+    .muted { color: var(--muted); }
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dokumentacja rozwiązania – `Quiz.Core` i `Quiz.Teacher`</h1>
+    <p>Opis architektury, separacji odpowiedzialności, wzorców i MVP (bez `Student`).</p>
+	<p>Kamil Skop (partner: Bartosz Bieniek)</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>1. Przegląd architektury</h2>
+      <p>
+        Rozwiązanie składa się z biblioteki <code>Quiz.Core</code> oraz aplikacji
+        <code>Quiz.Teacher</code>. <code>Core</code> dostarcza wspólne typy domenowe
+        i narzędzia wykorzystywane przez projekty „Teacher” i „Student”
+        (np. wspólne rekordy <code>Quiz/Question/Answer</code>).
+      </p>
+      <p class="muted">
+        Dzięki temu oba projekty używają tych samych klas domenowych i formatów danych,
+        co zapewnia spójność między edytorem quizu a aplikacją rozwiązywania quizu.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>2. Projekt `Quiz.Core` – odpowiedzialności i komponenty</h2>
+
+      <h3>2.1. Domena (Core.Domain)</h3>
+      <ul>
+        <li><code>Quiz</code> – rekord zawierający <code>Title</code>, <code>Questions</code>, <code>Guid</code>.</li>
+        <li><code>Question</code> – rekord z <code>Title</code>, punktacją, listą <code>Answers</code>.</li>
+        <li><code>Answer</code> – rekord z treścią i flagą poprawności.</li>
+        <li><code>ProblemException</code> – specjalizowany wyjątek domenowy dla warstwy usług.</li>
+      </ul>
+
+      <h3>2.2. Model (Core.Model)</h3>
+      <ul>
+        <li><code>IRecordFactory</code> / <code>RecordFactory</code> – wytwarzanie nowych rekordów
+            (quiz/pytanie/odpowiedź) oraz generowanie przykładowych pytań.</li>
+        <li><code>IQuizValidator</code> / <code>QuizValidator</code> – walidacja spójności danych
+            (np. pusty tytuł, brak poprawnych odpowiedzi, powielone GUID-y).</li>
+      </ul>
+
+      <h3>2.3. Usługi (Core.Services.Encryption)</h3>
+      <ul>
+        <li><code>AesKey</code> – implementacja szyfrowania symetrycznego (AES-GCM).</li>
+        <li>Obsługa losowych nonce, tagu i buforów, oraz zabezpieczenie pamięci klucza.</li>
+      </ul>
+
+      <h3>2.4. Rozszerzenia (Core.Extensions)</h3>
+      <ul>
+        <li><code>ImmutableArrayExtensions</code> – narzędzia do pracy na niemutowalnych kolekcjach,
+            np. <code>SwapAt</code>, <code>Shuffle</code>, <code>FindIndexOf</code>.</li>
+      </ul>
+
+      <p class="muted">
+        W `Core` logika jest izolowana od UI i nie ma zależności od WinForms.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>3. Projekt `Quiz.Teacher` – odpowiedzialności i komponenty</h2>
+
+      <h3>3.1. Warstwa View (UI)</h3>
+      <ul>
+        <li><code>IEditorView</code> – operacje plikowe, edycja tytułu, komunikaty, blokada UI.</li>
+        <li><code>IQuestionView</code> – zdarzenia i UI listy pytań.</li>
+        <li><code>IAnswerView</code> – zdarzenia i UI listy odpowiedzi.</li>
+        <li><code>MainForm</code> – implementacja <code>IEditorView</code> (WinForms).</li>
+        <li><code>QuestionView</code> / <code>AnswerView</code> – wyspecjalizowane widoki częściowe.</li>
+      </ul>
+
+      <h3>3.2. Warstwa Presenter</h3>
+      <ul>
+        <li><code>MainPresenter</code> – uruchamia wszystkie prezentery.</li>
+        <li><code>EditorPresenter</code> – obsługa tytułu, czyszczenia, zapisu/odczytu quizu.</li>
+        <li><code>QuestionPresenter</code> – pełna logika edycji pytań.</li>
+        <li><code>AnswerPresenter</code> – pełna logika edycji odpowiedzi.</li>
+      </ul>
+
+      <h3>3.3. Konfiguracja aplikacji</h3>
+      <p>
+        <code>Program.cs</code> tworzy obiekty modelu (<code>QuizValidator</code>,
+        <code>RecordFactory</code>) i widoku, a następnie łączy je przez <code>MainPresenter</code>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>4. Separacja odpowiedzialności (SRP)</h2>
+      <ul>
+        <li><strong>Domain (Core)</strong>: wyłącznie definicje danych i wyjątków.</li>
+        <li><strong>Model (Core)</strong>: walidacja i fabryki rekordów.</li>
+        <li><strong>Services (Core)</strong>: bezpieczeństwo i szyfrowanie.</li>
+        <li><strong>Presenter (Teacher)</strong>: logika prezentacji i koordynacja.</li>
+        <li><strong>View (Teacher)</strong>: UI oraz zdarzenia, bez logiki biznesowej.</li>
+      </ul>
+      <p class="muted">
+        Ta separacja pozwala na niezależne rozwijanie UI, domeny i mechanizmów zapisu/szyfrowania.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>5. Wspólna biblioteka `Core` jako spójnik projektów</h2>
+      <ul>
+        <li>Rekordy <code>Quiz/Question/Answer</code> są współdzielone przez Teacher i Student.</li>
+        <li>Walidacja i fabryki pochodzą z <code>Core.Model</code>, co zapewnia identyczne zasady danych.</li>
+        <li>Rozszerzenia dla <code>ImmutableArray</code> wspierają niezmienność danych
+            w obu projektach.</li>
+      </ul>
+      <p class="muted">
+        Dzięki temu format quizu jest jednolity i przenośny między aplikacjami.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>6. Wzorce projektowe</h2>
+
+      <h3>6.1. Strategia szyfrowania (Strategy)</h3>
+      <p>
+        Klasa <code>AesKey</code> implementuje interfejs <code>ISymmetricKey</code>.
+        Oznacza to możliwość podmiany implementacji na inny algorytm symetryczny
+        bez zmiany logiki używającej klucza.
+      </p>
+      <ul>
+        <li><span class="pill">Kontrakt</span> <code>Encrypt(byte[])</code>, <code>Decrypt(byte[])</code></li>
+        <li><span class="pill">Implementacja</span> AES-GCM z nonce + tag</li>
+        <li><span class="pill">Odporność</span> wyjątki opakowane w <code>ProblemException</code></li>
+      </ul>
+      <p class="muted">
+        Z punktu widzenia architektury, klasa szyfrująca jest „strategią”,
+        a kod wyższego poziomu operuje na interfejsie.
+      </p>
+
+      <h3>6.2. Fabryka (Factory)</h3>
+      <p>
+        <code>RecordFactory</code> tworzy kompletne, poprawne rekordy domenowe.
+        Dzięki temu logika UI i presenterów nie musi znać szczegółów inicjalizacji.
+      </p>
+
+      <h3>6.3. Niezmienność danych</h3>
+      <p>
+        Rekordy domenowe są niemutowalne, a zmiany są realizowane przez tworzenie kopii
+        (<code>with</code>) oraz operacje na <code>ImmutableArray</code>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>7. MVP – kluczowy wzorzec rozwiązania</h2>
+
+      <h3>7.1. Role w MVP</h3>
+      <ul>
+        <li><strong>Model</strong> – <code>Quiz.Core</code> (domena + walidacja + fabryki).</li>
+        <li><strong>View</strong> – <code>IEditorView</code>, <code>IQuestionView</code>, <code>IAnswerView</code>
+            i ich implementacje WinForms.</li>
+        <li><strong>Presenter</strong> – <code>EditorPresenter</code>, <code>QuestionPresenter</code>,
+            <code>AnswerPresenter</code>, spięte w <code>MainPresenter</code>.</li>
+      </ul>
+
+      <h3>7.2. Komunikacja i przepływ</h3>
+      <pre><code>View (zdarzenie) → Presenter (logika) → Model (modyfikacja) → View (odświeżenie)</code></pre>
+
+      <h3>7.3. Przykład: zmiana tytułu quizu</h3>
+      <ul>
+        <li>UI wywołuje zdarzenie <code>IEditorView.OnTitleChange</code>.</li>
+        <li><code>EditorPresenter</code> tworzy nową wersję <code>Quiz</code> z nowym tytułem.</li>
+        <li>Nowy <code>Quiz</code> jest ustawiany z powrotem na <code>View</code>.</li>
+        <li>Widok odświeża UI w metodzie <code>RefreshView()</code>.</li>
+      </ul>
+
+      <h3>7.4. Zalety MVP w tym projekcie</h3>
+      <ul>
+        <li>UI jest „pasywny” – nie zawiera logiki biznesowej.</li>
+        <li>Presenter jest testowalny bez WinForms.</li>
+        <li>Model jest niezależny od UI i możliwy do użycia przez inny projekt.</li>
+      </ul>
+
+      <p class="muted">
+        W praktyce MVP jest centralnym szkieletem rozwiązania – odpowiada
+        za stabilną i czytelną separację warstw.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
